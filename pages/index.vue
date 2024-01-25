@@ -1,30 +1,30 @@
 <template>
-  <div>
-    This is the home page.
-  </div>
-
-  <form @submit.prevent class="w-200 flex flex-col gap-2">
-    <input type="text" v-model="title" placeholder="Title" />
-    <textarea v-model="content" placeholder="Content"></textarea>
-    <div class="w-full flex items-center justify-around">
-      <input type="checkbox" v-model="published" />
-      <input type="number" v-model="id" />
-    </div>
-    <div class="w-full flex items-center justify-around">
-      <button @click="upload">Submit</button>
-      <button @click="update">Update</button>
-      <button @click="deletePost">Delete</button>
+  <div class="w-full bg-gray-600 flex flex-col items-center">
+    <div>
+      This is the home page.
     </div>
 
-  </form>
+    <form @submit.prevent class="w-200 flex flex-col gap-2">
+      <input type="text" v-model="title" placeholder="Title" />
+      <textarea v-model="content" placeholder="Content"></textarea>
+      <div class="w-full flex items-center justify-around">
+        <input type="checkbox" v-model="published" />
+        <input type="number" v-model="id" />
+      </div>
+      <div class="w-full flex items-center justify-around">
+        <button @click="upload">Submit</button>
+        <button @click="update">Update</button>
+        <button @click="deletePost">Delete</button>
+      </div>
+    </form>
 
-  <div>
-    <div v-for="post in posts" class="my-2">
-      <h2>{{ post.title }}</h2>
-      <div>Content: {{ post.content }}</div>
-      <div>ID: {{ post.id }}</div>
-      <div>Published: {{ post.published === 1 ? "yes" : "no" }}</div>
+    <div class="w-full md:w-190 px-2">
+      <div v-for="post in posts">
+        <PostCard class="mt-4" :title="post.title" :content="post.content" :createDate="post.createdDate"
+          :updateDate="post.updatedDate" />
+      </div>
     </div>
+
   </div>
 </template>
 
@@ -35,7 +35,7 @@ const content = ref("")
 const published = ref(false)
 const id = ref(0)
 
-const { data: posts, pending, error, refresh } = await useFetch("/api/posts", {})
+const { data: posts, pending, error, refresh } = await useFetch("/api/posts")
 
 const upload = async () => {
   await useFetch("/api/posts", {
@@ -68,6 +68,7 @@ const update = async () => {
     }
     refresh()
     id.value = 0
+    console.log(posts.value)
   })
 }
 
