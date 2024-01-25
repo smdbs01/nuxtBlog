@@ -4,7 +4,7 @@
   </div>
 
   <form @submit.prevent class="w-200 flex flex-col gap-2">
-    <input type="text" v-model="title" placeholder="Title"/>
+    <input type="text" v-model="title" placeholder="Title" />
     <textarea v-model="content" placeholder="Content"></textarea>
     <div class="w-full flex items-center justify-around">
       <input type="checkbox" v-model="published" />
@@ -15,7 +15,7 @@
       <button @click="update">Update</button>
       <button @click="deletePost">Delete</button>
     </div>
-    
+
   </form>
 
   <div>

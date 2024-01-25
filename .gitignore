@@ -23,5 +23,8 @@ logs
 .env.*
 !.env.example
 
+# VSCode
+.vscode
+
 # drizzle migrate files
 server/db/drizzle
