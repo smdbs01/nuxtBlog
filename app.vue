@@ -6,6 +6,6 @@
 
 <style>
 body {
-  @apply overflow-y-scroll;
+  @apply overflow-y-scroll bg-gray-700;
 }
 </style>

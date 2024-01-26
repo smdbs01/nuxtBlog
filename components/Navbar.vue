@@ -1,8 +1,8 @@
 <template>
-  <header class="w-full h-15 flex items-center justify-center bg-gray-900 position-sticky">
-    <nav class="w-full sm:w-[40rem] flex items-center justify-between">
+  <header class="w-full h-15 flex items-center justify-center bg-gray-900 fixed top-0 left-0">
+    <nav class="w-full sm:w-[60rem] flex items-center justify-between px-2">
       <NuxtLink to="/">Home</NuxtLink>
-      <div class="w-[30%] flex items-center justify-around">
+      <div class="flex items-center justify-around">
         <NuxtLink to="/about">About</NuxtLink>
         <NuxtLink to="/login">Login</NuxtLink>
       </div>
@@ -12,7 +12,7 @@
 
 <style>
 nav a {
-  @apply border-b-2 border-gray-500 text-gray-100 text-lg font-semibold uppercase tracking-wider m-2 transition-colors;
+  @apply border-b-2 border-gray-500 text-gray-100 text-lg font-semibold uppercase tracking-wider mx-4 transition-colors;
 }
 
 nav a.router-link-active {

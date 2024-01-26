@@ -1,11 +1,10 @@
 /**
  * Converts an ISO string to a formatted local date and time string.
  *
- * @param {isoString: string} - the ISO string to convert
- * @return {string} the formatted local date and time string
+ * @param isoString - the ISO string to convert
+ * @returns the formatted local date and time string
  */
-export default function (isoString: string) {
-  // Create a Date object from the ISO string
+export default function (isoString: string): string {
   const date = new Date(isoString);
 
   // Extract date and time components
