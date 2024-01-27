@@ -6,8 +6,8 @@
       <button @click="navigateTo('/')">Back to home</button>
     </div>
     <Loading v-else-if="status === 'pending'" class="w-full" />
-    <div v-else class="w-full md:w-190 min-h-[100%] bg-gray-100 p-2">
-      <Article :content="post.content" />
+    <div v-else class="w-full md:w-[758px] min-h-[100%]">
+      <Article :title="post.title" :content="post.content" />
     </div>
     <div>
       {{ $route.params.id }}
