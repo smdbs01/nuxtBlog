@@ -1,9 +1,14 @@
 <template>
-  <div class="bg-gray-100 w-full p-2 rounded-2 shadow-md transition-all hover:shadow-lg hover:bg-coolGray-200" to="/">
+  <div
+    class="rounded-2 hover:bg-coolGray-200 w-full bg-gray-100 p-2 shadow-md transition-all hover:shadow-lg"
+    to="/"
+  >
     <!-- Title -->
     <div>
-      <NuxtLink :to="'/post/' + post.id"
-        class="text-xl font-semibold transition-all border-b-(2 gray-300) hover:border-gray-500">
+      <NuxtLink
+        :to="'/post/' + post.id"
+        class="border-b-(2 gray-300) text-xl font-semibold transition-all hover:border-gray-500"
+      >
         {{ post.title }}
       </NuxtLink>
     </div>
@@ -31,11 +36,19 @@
   </div>
 </template>
 
-<script setup>
-import { posts } from '~/server/db/schema';
+<script setup lang="ts">
+import z from 'zod'
 
-const props = defineProps({
-  post: posts
+const postZ = z.object({
+  id: z.number(),
+  title: z.string(),
+  content: z.string(),
+  createdDate: z.string(),
+  updatedDate: z.string(),
 })
+
+const props = defineProps<{
+  post: z.infer<typeof postZ>
+}>()
 
 </script>

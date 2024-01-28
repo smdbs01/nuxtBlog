@@ -4,7 +4,10 @@
  * @param target target element
  * @param offset offset, in px
  */
-export default function (target: HTMLElement, offset: number = 0) {
+export default function (target: HTMLElement | null, offset: number = 0) {
+  if (!target) {
+    return;
+  }
   const pos = target.style.position;
   const top = target.style.top;
   target.style.position = "relative";

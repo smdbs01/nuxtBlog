@@ -1,45 +1,63 @@
+<!-- eslint-disable vue/no-v-html -->
 <template>
   <article>
-    <div class="text-5xl flex justify-center my-4">
+    <div
+      :class="{ 'opacity-0': isLoading }"
+      class="my-4 flex justify-center text-5xl"
+    >
       {{ title }}
     </div>
-    <Loading v-if="isLoading" />
-    <div v-html="$parseMD2HTML(content)" class="w-full content relative"
-      :class="{ loaded: !isLoading, 'opacity-0': isLoading }" ref="contentEl"></div>
+    <LoadingComp v-if="isLoading" />
+    <div
+      ref="contentEl"
+      class="content relative w-full"
+      :class="{ loaded: !isLoading, 'opacity-0': isLoading }"
+      v-html="$parseMD2HTML(content)"
+    />
   </article>
 </template>
 
-<script setup>
+<script setup lang="ts">
 
-const props = defineProps({
-  id: Number,
-  title: String,
-  content: String
+const props = defineProps<{
+  id: number,
+  title: string,
+  content: string
+}>()
+
+useHead({
+  title: props.title,
+  meta: [
+    { name: 'description', content: props.content }
+  ]
 })
 
 const router = useRouter()
-const contentEl = ref(null)
+const contentEl: Ref<HTMLDivElement | null> = ref(null)
 const isLoading = ref(true)
-const activeHeading = ref([])
 
 watch(() => contentEl.value, () => {
   if (contentEl.value) {
     isLoading.value = false
 
-    contentEl.value.querySelectorAll('a[href^="#"]').forEach(anchor => {
+    contentEl.value.querySelectorAll('a[href^="#"]:not(a[href^="#fnref"])').forEach(anchor => {
+      anchor.setAttribute('tabindex', '-1')
       anchor.addEventListener('click', function (e) {
         e.preventDefault();
-        router.replace({ hash: this.getAttribute('href') })
-        scrollTo(document.querySelector(this.getAttribute('href')), 80)
-        document.activeElement.blur();
+        const id = anchor.getAttribute('href') || ''
+        router.replace({ hash: id })
+        myScrollTo(document.querySelector(id), 80)
+        if (document.activeElement instanceof HTMLElement) {
+          document.activeElement.blur()
+        }
       })
     })
 
     contentEl.value.querySelectorAll('h1, h2, h3').forEach(heading => {
       heading.addEventListener('click', function (e) {
         e.preventDefault();
-        router.replace({ hash: "#" + this.id })
-        scrollTo(this, 80)
+        router.replace({ hash: "#" + heading.id })
+        myScrollTo(heading as HTMLElement, 80)
       })
     })
 
@@ -53,12 +71,12 @@ onBeforeUnmount(() => {
 })
 
 const checkHeadingsInView = function () {
-  const active = activeHeading.value
-  contentEl.value.querySelectorAll('h1, h2, h3').forEach(heading => {
+  contentEl.value?.querySelectorAll('h1, h2, h3').forEach(heading => {
+    const anchor = contentEl.value?.querySelector('a[href="#' + heading.id + '"]')
     if (heading.getBoundingClientRect().top < window.screen.height && heading.getBoundingClientRect().bottom > 60) {
-      contentEl.value.querySelector('a[href="#' + heading.id + '"]').classList.add('active')
+      anchor?.classList.add('active')
     } else {
-      contentEl.value.querySelector('a[href="#' + heading.id + '"]').classList.remove('active')
+      anchor?.classList.remove('active')
     }
   })
 }
@@ -81,11 +99,13 @@ article {
 
 /* Links */
 .content a {
-  @apply text-sky-400;
+  @apply b-b-1 b-b-dashed b-b-gray-400;
+  color: #35DD7C;
 }
 
 .content a:hover {
-  @apply text-blue-400 underline underline-blue-400;
+  @apply b-b-solid;
+  color: #359323;
 }
 
 /* Headings */
@@ -120,7 +140,7 @@ article {
 }
 
 .content .header-anchor {
-  @apply w-8 absolute pos-left-[-2rem] opacity-0 text-blue-400 group-hover:opacity-100 transition-opacity;
+  @apply w-8 absolute pos-left-[-2rem] opacity-0 b-b-0 text-teal-400 group-hover:opacity-100 transition-all;
 }
 
 .content .header-anchor:focus {
@@ -163,11 +183,11 @@ article {
 
 /* Code */
 .content code {
-  @apply px-2 py-1 rounded-md bg-gray-800 b b-zinc-700 opacity-100;
+  @apply px-2 py-1 rounded-md bg-dark-900 b b-zinc-700 opacity-100;
 }
 
 .content pre {
-  @apply px-4 py-2 rounded-md bg-gray-800 b b-zinc-700 overflow-x-auto shadow-md;
+  @apply px-4 py-2 rounded-md bg-dark-900 b b-zinc-700 overflow-x-auto shadow-md;
 }
 
 .content pre code {
@@ -180,11 +200,11 @@ article {
 }
 
 .content table th {
-  @apply px-4 py-2 b b-l-0 b-gray-600 bg-gray-800 font-semibold;
+  @apply px-4 py-2 b b-l-0 b-gray-600 bg-dark-900 font-semibold;
 }
 
 .content table td {
-  @apply px-4 py-2 b b-l-0 b-gray-600 b-t-none bg-gray-800;
+  @apply px-4 py-2 b b-l-0 b-gray-600 b-t-none bg-dark-800;
 }
 
 .content table tr>td:first-of-type,
@@ -194,25 +214,42 @@ article {
 
 /* https://stackoverflow.com/a/47318412 */
 .content table th:first-of-type {
-  border-top-left-radius: 1rem;
+  border-top-left-radius: 8px;
 }
 
 .content table th:last-of-type {
-  border-top-right-radius: 1rem;
+  border-top-right-radius: 8px;
 }
 
 .content table tr:last-of-type td:first-of-type {
-  border-bottom-left-radius: 1rem;
+  border-bottom-left-radius: 8px;
 }
 
 .content table tr:last-of-type td:last-of-type {
-  border-bottom-right-radius: 1rem;
+  border-bottom-right-radius: 8px;
+}
+
+/* Footnotes */
+.content .footnotes {
+  @apply px-4 py-2 rounded-md flex text-sm;
+}
+
+.content .footnote-ref a {
+  @apply b-b-0;
+}
+
+.content .footnotes .footnote-backref {
+  @apply ;
+}
+
+.content .footnotes .footnote-backref:hover {
+  @apply bg-teal-400 b-b-0;
 }
 
 /* TOC */
 .content .table-of-contents {
-  @apply h-3xl w-[20%] fixed hidden top-40 overflow-y-auto;
-  left: calc(70% + 7rem);
+  @apply h-3xl w-[20%] p-l-8 fixed hidden b-l-1 b-l-dashed b-l-gray-600 top-40 overflow-y-auto;
+  left: calc(70% + 7em);
 }
 
 .content.loaded .table-of-contents {

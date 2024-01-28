@@ -1,10 +1,16 @@
 <template>
-  <header class="w-full h-15 flex items-center justify-center bg-gray-900 sticky top-0 left-0 z-20">
-    <nav class="w-full sm:w-[50rem] flex items-center justify-between px-2">
-      <NuxtLink to="/">Home</NuxtLink>
+  <header class="h-15 sticky left-0 top-0 z-20 flex w-full items-center justify-center bg-gray-900">
+    <nav class="flex w-full items-center justify-between px-2 sm:w-[50rem]">
+      <NuxtLink to="/">
+        Home
+      </NuxtLink>
       <div class="flex items-center justify-around">
-        <NuxtLink to="/about">About</NuxtLink>
-        <NuxtLink to="/login">Login</NuxtLink>
+        <NuxtLink to="/about">
+          About
+        </NuxtLink>
+        <NuxtLink to="/login">
+          Login
+        </NuxtLink>
       </div>
     </nav>
   </header>

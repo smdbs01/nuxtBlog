@@ -1,29 +1,56 @@
 <template>
-  <div class="w-full min-h-screen flex flex-col items-center">
-    <form @submit.prevent class="w-200 flex flex-col gap-2">
-      <input type="text" v-model="title" placeholder="Title" />
-      <textarea v-model="content" placeholder="Content"></textarea>
-      <div class="w-full flex items-center justify-around">
-        <input type="checkbox" v-model="published" />
-        <input type="number" v-model="id" />
+  <div class="flex min-h-screen w-full flex-col items-center">
+    <form
+      class="w-200 flex flex-col gap-2"
+      @submit.prevent
+    >
+      <input
+        v-model="title"
+        type="text"
+        placeholder="Title"
+      >
+      <textarea
+        v-model="content"
+        placeholder="Content"
+      />
+      <div class="flex w-full items-center justify-around">
+        <input
+          v-model="published"
+          type="checkbox"
+        >
+        <input
+          v-model="id"
+          type="number"
+        >
       </div>
-      <div class="w-full flex items-center justify-around">
-        <button @click="upload">Submit</button>
-        <button @click="update">Update</button>
-        <button @click="deletePost">Delete</button>
+      <div class="flex w-full items-center justify-around">
+        <button @click="upload">
+          Submit
+        </button>
+        <button @click="update">
+          Update
+        </button>
+        <button @click="deletePost">
+          Delete
+        </button>
       </div>
     </form>
 
-    <div class="w-[90%] lg:w-[60rem] px-2">
-      <div v-for="post in posts">
-        <PostCard class="mt-4" :post="post" />
+    <div class="w-[90%] px-2 lg:w-[60rem]">
+      <div
+        v-for="post in posts"
+        :key="post.id"
+      >
+        <PostCardComp
+          class="mt-4"
+          :post="post"
+        />
       </div>
     </div>
-
   </div>
 </template>
 
-<script setup>
+<script setup lang="ts">
 
 const title = ref("")
 const content = ref("")

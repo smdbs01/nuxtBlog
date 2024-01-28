@@ -1,8 +1,6 @@
 <template>
   <div style="scrollbar-gutter: stable;">
-    <Navbar />
-    <slot>
-
-    </slot>
+    <NavbarComp />
+    <slot />
   </div>
 </template>
