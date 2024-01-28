@@ -1,5 +1,5 @@
 <template>
-  <div class="w-full min-h-screen pt-15 flex flex-col items-center">
+  <div class="w-full min-h-screen flex flex-col items-center">
     <form @submit.prevent class="w-200 flex flex-col gap-2">
       <input type="text" v-model="title" placeholder="Title" />
       <textarea v-model="content" placeholder="Content"></textarea>

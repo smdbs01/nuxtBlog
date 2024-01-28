@@ -1,13 +1,13 @@
 <template>
-  <div class="w-full min-h-screen pt-15 flex flex-col items-center p-2">
+  <div class="w-full min-h-screen flex flex-col items-center p-2">
     <div v-if="status === 'error'">
       Clear error here
       <br />
       <button @click="navigateTo('/')">Back to home</button>
     </div>
     <Loading v-else-if="status === 'pending'" class="w-full" />
-    <div v-else class="w-full md:w-[758px] min-h-[100%]">
-      <Article :title="post.title" :content="post.content" />
+    <div v-else class="w-full md:w-[758px] min-h-[100%] px-4">
+      <Article :id="post.id" :title="post.title" :content="post.content" />
     </div>
     <div>
       {{ $route.params.id }}
