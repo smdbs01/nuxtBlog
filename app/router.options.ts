@@ -8,8 +8,6 @@ export default <RouterOptions>{
       if (!to.hash) {
         return { top: 0 };
       }
-      console.log(from);
-      console.log(to);
 
       if (from.path === to.path) {
         return {

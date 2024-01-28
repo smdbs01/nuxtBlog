@@ -13,7 +13,7 @@ export default defineNuxtPlugin(() => {
   const mdi = markdownit({
     linkify: true,
     typographer: true,
-    highlight: function (str: string, lang: string) {
+    highlight: function (str, lang) {
       if (lang && hljs.getLanguage(lang)) {
         try {
           return hljs.highlight(str, { language: lang }).value;
@@ -41,7 +41,7 @@ export default defineNuxtPlugin(() => {
 
   return {
     provide: {
-      parseMD2HTML: function (md: string): string {
+      parseMD2HTML: function (md) {
         return mdi.render("[[toc]]\n" + md);
       },
     },

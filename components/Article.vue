@@ -20,6 +20,7 @@ const props = defineProps({
 const router = useRouter()
 const contentEl = ref(null)
 const isLoading = ref(true)
+const activeHeading = ref([])
 
 watch(() => contentEl.value, () => {
   if (contentEl.value) {
@@ -52,11 +53,12 @@ onBeforeUnmount(() => {
 })
 
 const checkHeadingsInView = function () {
+  const active = activeHeading.value
   contentEl.value.querySelectorAll('h1, h2, h3').forEach(heading => {
     if (heading.getBoundingClientRect().top < window.screen.height && heading.getBoundingClientRect().bottom > 60) {
-      contentEl.value.querySelector('.table-of-contents a[href^="#' + heading.id + '"]').classList.add('active')
+      contentEl.value.querySelector('a[href="#' + heading.id + '"]').classList.add('active')
     } else {
-      contentEl.value.querySelector('.table-of-contents a[href^="#' + heading.id + '"]').classList.remove('active')
+      contentEl.value.querySelector('a[href="#' + heading.id + '"]').classList.remove('active')
     }
   })
 }
@@ -209,8 +211,8 @@ article {
 
 /* TOC */
 .content .table-of-contents {
-  @apply fixed hidden top-40;
-  left: calc(70% + 6rem);
+  @apply h-3xl w-[20%] fixed hidden top-40 overflow-y-auto;
+  left: calc(70% + 7rem);
 }
 
 .content.loaded .table-of-contents {
@@ -227,7 +229,7 @@ article {
 }
 
 .content .table-of-contents>ol>li {
-  @apply pl-0;
+  @apply pl-1;
 }
 
 .content .table-of-contents li {
@@ -235,15 +237,16 @@ article {
 }
 
 .content .table-of-contents ol li a {
-  @apply text-gray-400 b-b-0;
+  @apply text-gray-400 b-b-0 transition-color underline-opacity-0;
 }
 
 .content .table-of-contents ol li a.active {
-  @apply text-blue-400 b-b-0;
+  @apply text-teal-400;
 }
 
+.content .table-of-contents ol li a:focus,
 .content .table-of-contents ol li a:hover {
-  @apply text-teal-300 b-b-0;
+  @apply text-teal-300;
 }
 
 /* Syntax Highlight Start */
