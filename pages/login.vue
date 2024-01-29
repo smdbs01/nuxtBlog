@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div class="flex min-h-screen w-full flex-col items-center">
     <form @submit.prevent="login">
       <input
         v-model="username"
@@ -13,6 +13,8 @@
         Login
       </button>
     </form>
+    <pre>{{ status }}</pre>
+    <pre>{{ data }}</pre>
   </div>
 </template>
 
@@ -21,7 +23,7 @@
 const username = ref("jsmith")
 const password = ref("123456")
 
-const { signIn, signOut, } = useAuth()
+const { signIn, signOut, status, data } = useAuth()
 
 const login = () => {
   signIn("credentials", { username: username.value, password: password.value })

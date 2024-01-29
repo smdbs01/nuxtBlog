@@ -8,6 +8,8 @@ export default defineNuxtConfig({
     cookie: resolve(__dirname, "node_modules/cookie"),
   },
   auth: {
+    isEnabled: true,
+    baseURL: process.env.AUTH_BASE_URL || "http://localhost:3000",
     provider: {
       type: "authjs",
     },
