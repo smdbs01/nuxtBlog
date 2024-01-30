@@ -12,7 +12,7 @@
       ref="contentEl"
       class="content relative w-full"
       :class="{ loaded: !isLoading, 'opacity-0': isLoading }"
-      v-html="$parseMD2HTML(content)"
+      v-html="content"
     />
   </article>
 </template>
@@ -45,7 +45,7 @@ watch(() => contentEl.value, () => {
       anchor.addEventListener('click', function (e) {
         e.preventDefault();
         const id = anchor.getAttribute('href') || ''
-        router.replace({ hash: id })
+        //router.replace({ hash: id })
         myScrollTo(document.querySelector(id), 80)
         if (document.activeElement instanceof HTMLElement) {
           document.activeElement.blur()
@@ -56,7 +56,7 @@ watch(() => contentEl.value, () => {
     contentEl.value.querySelectorAll('h1, h2, h3').forEach(heading => {
       heading.addEventListener('click', function (e) {
         e.preventDefault();
-        router.replace({ hash: "#" + heading.id })
+        //router.replace({ hash: "#" + heading.id })
         myScrollTo(heading as HTMLElement, 80)
       })
     })
@@ -200,16 +200,15 @@ article {
 }
 
 .content table th {
-  @apply px-4 py-2 b b-l-0 b-gray-600 bg-dark-900 font-semibold;
+  @apply px-4 py-3 bg-dark-800 font-semibold;
 }
 
 .content table td {
-  @apply px-4 py-2 b b-l-0 b-gray-600 b-t-none bg-dark-800;
+  @apply px-4 py-2 bg-zinc-800;
 }
 
-.content table tr>td:first-of-type,
-.content table tr>th:first-of-type {
-  @apply b-l-1;
+.content table tbody tr:nth-child(even) td {
+  @apply bg-zinc-900;
 }
 
 /* https://stackoverflow.com/a/47318412 */
@@ -248,7 +247,7 @@ article {
 
 /* TOC */
 .content .table-of-contents {
-  @apply h-3xl w-[20%] p-l-8 fixed hidden b-l-1 b-l-dashed b-l-gray-600 top-40 overflow-y-auto;
+  @apply h-2xl w-[20%] p-l-8 fixed hidden b-l-1 b-l-dashed b-l-gray-600 top-40 overflow-y-auto;
   left: calc(70% + 7em);
 }
 

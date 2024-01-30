@@ -1,3 +1,4 @@
+// @ts-nocheck
 import markdownit from "markdown-it";
 // import hljs from "highlight.js";
 import Shiki from "@shikijs/markdown-it";
@@ -49,23 +50,23 @@ export default defineNuxtPlugin(async () => {
       slugify: (s) => slugify(s),
     });
 
-  const proxy = (tokens, idx, options, env, self) => {
-    self.renderToken(tokens, idx, options);
-  };
-  const defaultImageRenderer = markdownit().renderer.rules.image || proxy;
+  // const proxy = (tokens, idx, options, env, self) => {
+  //   self.renderToken(tokens, idx, options);
+  // };
+  // const defaultImageRenderer = markdownit().renderer.rules.image || proxy;
 
-  const nuxtImgPlugin = (markdown) => {
-    markdown.renderer.rules.image = (tokens, idx, options, env, self) => {
-      tokens[idx].tag = "NuxtImg";
-      return defaultImageRenderer(tokens, idx, options, env, self);
-    };
-  };
+  // const nuxtImgPlugin = (markdown) => {
+  //   markdown.renderer.rules.image = (tokens, idx, options, env, self) => {
+  //     tokens[idx].tag = "NuxtImg";
+  //     return defaultImageRenderer(tokens, idx, options, env, self);
+  //   };
+  // };
 
-  mdi.use(nuxtImgPlugin);
+  // mdi.use(nuxtImgPlugin);
 
   return {
     provide: {
-      parseMD2HTML: function (md) {
+      parseMD2HTML: function (md: string) {
         return mdi.render("[[toc]]\n" + md);
       },
     },

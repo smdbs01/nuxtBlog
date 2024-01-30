@@ -18,7 +18,7 @@
       <ArticleComp
         :id="post?.id || 0"
         :title="post?.title || ''"
-        :content="post?.content || ''"
+        :content="$parseMD2HTML(post?.content || '')"
       />
     </div>
     <div>
@@ -28,7 +28,7 @@
 </template>
 
 <script setup lang="ts">
-
 const route = useRoute()
 const { data: post, pending, error, status } = await useFetch(`/api/posts/${route.params.id}`)
+
 </script>

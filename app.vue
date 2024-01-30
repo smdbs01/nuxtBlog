@@ -30,6 +30,10 @@ useHead({
 </script>
 
 <style>
+html {
+  @apply scroll-smooth;
+}
+
 body {
   @apply overflow-y-scroll bg-gray-800;
 }

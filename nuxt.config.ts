@@ -14,11 +14,6 @@ export default defineNuxtConfig({
       type: "authjs",
     },
   },
-  router: {
-    options: {
-      scrollBehaviorType: "auto",
-    },
-  },
   nitro: {
     esbuild: {
       options: {

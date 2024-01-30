@@ -6,35 +6,49 @@ import { eq } from "drizzle-orm";
 
 export default NuxtAuthHandler({
   secret: process.env.AUTH_SECRET || "Enter your secret here",
+  pages: {
+    signIn: "/login",
+  },
   providers: [
+    // @ts-ignore
     CredentialsProvider.default({
-      name: "Credentials",
-      credentials: {
-        username: { label: "Username", type: "text", placeholder: "jsmith" },
-        password: { label: "Password", type: "password" },
-      },
-      async authorize(credentials: any) {
-        try {
-          console.log(credentials);
-          const user = await db
-            .select()
-            .from(users)
-            .where(eq(users.name, credentials?.username));
-          const match = await comparePasswords(
-            credentials?.password,
-            user[0].password
-          );
-          if (match) {
-            return user[0];
-          }
+      authorize: async function (credentials: {
+        username: string;
+        password: string;
+      }) {
+        const userAny = await db
+          .select()
+          .from(users)
+          .where(eq(users.name, credentials?.username || ""));
+        if (!userAny.length) {
           return null;
-        } catch (error) {
-          throw createError({
-            statusCode: 401,
-            message: "Invalid credentials: No user found",
-          });
         }
+        const match = await comparePasswords(
+          credentials?.password || "",
+          userAny[0].password
+        );
+        if (match) {
+          return userAny[0];
+        }
+        return null;
       },
     }),
   ],
+  callbacks: {
+    async jwt({ token, user }) {
+      if (user) {
+        // @ts-ignore
+        token.role = user.role;
+      }
+      return token;
+    },
+    async session({ session, token }) {
+      if (!session.user) {
+        return session;
+      }
+      // @ts-ignore
+      session.user.role = token.role;
+      return session;
+    },
+  },
 });

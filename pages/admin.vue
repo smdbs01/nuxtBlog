@@ -4,8 +4,12 @@
   </div>
 </template>
 
-<script setup lang="ts">
+<script setup>
+
 definePageMeta({
-  middleware: 'auth'
+  middleware: [
+    "auth-middleware",
+    "auth"
+  ]
 })
 </script>
