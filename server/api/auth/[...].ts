@@ -47,7 +47,7 @@ export default NuxtAuthHandler({
         return session;
       }
       // @ts-ignore
-      session.user.role = token.role;
+      session.role = token.role;
       return session;
     },
   },

@@ -45,7 +45,7 @@ watch(() => contentEl.value, () => {
       anchor.addEventListener('click', function (e) {
         e.preventDefault();
         const id = anchor.getAttribute('href') || ''
-        //router.replace({ hash: id })
+        router.replace({ hash: id })
         myScrollTo(document.querySelector(id), 80)
         if (document.activeElement instanceof HTMLElement) {
           document.activeElement.blur()
@@ -56,7 +56,7 @@ watch(() => contentEl.value, () => {
     contentEl.value.querySelectorAll('h1, h2, h3').forEach(heading => {
       heading.addEventListener('click', function (e) {
         e.preventDefault();
-        //router.replace({ hash: "#" + heading.id })
+        router.replace({ hash: "#" + heading.id })
         myScrollTo(heading as HTMLElement, 80)
       })
     })

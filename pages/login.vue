@@ -26,6 +26,7 @@ const username = ref("admin")
 const password = ref("root")
 
 const { signIn, signOut, status, data } = useAuth()
+const route = useRoute()
 
 const login = async () => {
   // @ts-ignore
@@ -39,7 +40,7 @@ const login = async () => {
     console.log(error)
     return
   } else {
-    await navigateTo("/admin")
+    await navigateTo(route.query.redirect as string || "/")
   }
 }
 

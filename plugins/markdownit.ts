@@ -1,4 +1,4 @@
-// @ts-nocheck
+// @ts-nocheck too many un-typed imports
 import markdownit from "markdown-it";
 // import hljs from "highlight.js";
 import Shiki from "@shikijs/markdown-it";

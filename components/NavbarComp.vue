@@ -1,20 +1,30 @@
 <template>
   <header class="h-15 sticky left-0 top-0 z-20 flex w-full items-center justify-center bg-gray-900">
     <nav class="flex w-full items-center justify-between px-2 sm:w-[50rem]">
-      <NuxtLink to="/">
-        Home
-      </NuxtLink>
       <div class="flex items-center justify-around">
+        <NuxtLink to="/">
+          Home
+        </NuxtLink>
         <NuxtLink to="/about">
           About
         </NuxtLink>
-        <NuxtLink to="/login">
-          Login
-        </NuxtLink>
       </div>
+      <NuxtLink
+        v-if="status === 'unauthenticated'"
+        :to="'/login?redirect=' + $route.fullPath"
+      >
+        Login
+      </NuxtLink>
+      <AvaterComp v-else />
     </nav>
   </header>
 </template>
+
+<script setup>
+const { status, data } = useAuth()
+
+
+</script>
 
 <style scoped>
 nav a {

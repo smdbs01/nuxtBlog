@@ -12,6 +12,7 @@ export default function (target: HTMLElement | null, offset: number = 0) {
   const top = target.style.top;
   target.style.position = "relative";
   target.style.top = "-" + offset + "px";
+
   target.scrollIntoView({ behavior: "smooth", block: "start" });
   target.style.top = top;
   target.style.position = pos;

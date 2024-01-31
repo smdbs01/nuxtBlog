@@ -1,6 +1,6 @@
 <template>
   <div class="flex min-h-screen w-full flex-col items-center">
-    <form
+    <!-- <form
       class="w-200 flex flex-col gap-2"
       @submit.prevent
     >
@@ -34,7 +34,7 @@
           Delete
         </button>
       </div>
-    </form>
+    </form> -->
 
     <div class="w-[90%] px-2 lg:w-[60rem]">
       <div
