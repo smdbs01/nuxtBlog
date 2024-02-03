@@ -1,6 +1,6 @@
 <template>
-  <!-- https://loading.io/css/ -->
-  <div class="z-999 fixed left-0 top-0 flex size-full items-center justify-center bg-gray-500 opacity-50">
+  <div class="z-999 left-0 top-0 flex size-full items-center justify-center bg-gray-500 opacity-50">
+    <!-- https://loading.io/css/ -->
     <div class="lds-ellipsis">
       <div />
       <div />

@@ -1,7 +1,7 @@
 import { db } from "~/server/db";
 import { posts } from "~/server/db/schema";
 
-import { eq } from "drizzle-orm";
+import { eq, and } from "drizzle-orm";
 
 export default defineEventHandler(async (event) => {
   const id = Number(getRouterParam(event, "id"));
@@ -12,7 +12,10 @@ export default defineEventHandler(async (event) => {
     });
   }
 
-  const postAny = await db.select().from(posts).where(eq(posts.id, id));
+  const postAny = await db
+    .select()
+    .from(posts)
+    .where(and(eq(posts.id, id), eq(posts.published, 1)));
   if (!postAny.length) {
     throw createError({
       statusCode: 404,

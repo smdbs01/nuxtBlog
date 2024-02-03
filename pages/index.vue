@@ -1,6 +1,6 @@
 <template>
-  <div class="flex min-h-screen w-full flex-col items-center">
-    <!-- <form
+  <div class="flex h-[calc(100vh-3.75rem)] w-full flex-col items-center">
+    <form
       class="w-200 flex flex-col gap-2"
       @submit.prevent
     >
@@ -34,7 +34,7 @@
           Delete
         </button>
       </div>
-    </form> -->
+    </form>
 
     <div class="w-[90%] px-2 lg:w-[60rem]">
       <div
@@ -52,15 +52,23 @@
 
 <script setup lang="ts">
 
+definePageMeta({
+  auth: false,
+})
+
 const title = ref("")
 const content = ref("")
 const published = ref(false)
 const id = ref(0)
 
-const { data: posts, pending, error, refresh } = await useFetch("/api/posts")
+const { data: posts, pending, error, refresh } = await useFetch("/api/posts", {
+  query: {
+    page: 1
+  }
+})
 
 const upload = async () => {
-  await useFetch("/api/posts", {
+  await useFetch("/api/posts/admin", {
     method: "POST",
     body: {
       title: title.value,
@@ -76,7 +84,7 @@ const update = async () => {
   if (id.value === 0) {
     return
   }
-  await useFetch(`/api/posts/${id.value}`, {
+  await useFetch(`/api/posts/admin/${id.value}`, {
     method: "PUT",
     body: {
       title: title.value,
@@ -98,7 +106,7 @@ const deletePost = async () => {
   if (id.value === 0) {
     return
   }
-  await useFetch(`/api/posts/${id.value}`, {
+  await useFetch(`/api/posts/admin/${id.value}`, {
     method: "DELETE",
   }).then((res) => {
     const error = res.error

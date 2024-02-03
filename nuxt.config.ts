@@ -13,6 +13,7 @@ export default defineNuxtConfig({
     provider: {
       type: "authjs",
     },
+    globalAppMiddleware: true,
   },
   nitro: {
     esbuild: {

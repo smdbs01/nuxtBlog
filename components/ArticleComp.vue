@@ -7,7 +7,10 @@
     >
       {{ title }}
     </div>
-    <LoadingComp v-if="isLoading" />
+    <LoadingComp
+      v-if="isLoading"
+      class="fixed"
+    />
     <div
       ref="contentEl"
       class="content relative w-full"
@@ -40,7 +43,7 @@ watch(() => contentEl.value, () => {
   if (contentEl.value) {
     isLoading.value = false
 
-    contentEl.value.querySelectorAll('a[href^="#"]:not(a[href^="#fnref"])').forEach(anchor => {
+    contentEl.value.querySelectorAll('a[href^="#"]').forEach(anchor => {
       anchor.setAttribute('tabindex', '-1')
       anchor.addEventListener('click', function (e) {
         e.preventDefault();

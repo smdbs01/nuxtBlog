@@ -2,6 +2,9 @@
 <template>
   <div class="flex items-center">
     <!-- For now, only display user name -->
+    <span class="mx-4 border-gray-500 text-lg font-semibold text-gray-200">{{ "Hello, " +
+      data?.user?.name }}
+    </span>
     <div class="relative flex">
       <button
         class="z-10 block size-10 rounded-full bg-white focus:outline-blue-300"
@@ -51,10 +54,6 @@
         </li>
       </ul>
     </div>
-
-    <span class="mx-4 border-gray-500 text-lg font-semibold text-gray-200">{{ "Hello, " +
-      data?.user?.name }}
-    </span>
   </div>
 </template>
 

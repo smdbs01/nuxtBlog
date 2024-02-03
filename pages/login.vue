@@ -22,6 +22,13 @@
 </template>
 
 <script setup lang="ts">
+definePageMeta({
+  auth: {
+    unauthenticatedOnly: true,
+    navigateAuthenticatedTo: "/",
+  }
+})
+
 const username = ref("admin")
 const password = ref("root")
 

@@ -1,6 +1,6 @@
 <template>
   <div>
-    DashBoard
+    Image
   </div>
 </template>
 
@@ -9,7 +9,6 @@
 definePageMeta({
   middleware: [
     "admin",
-    "auth"
   ],
   layout: "admin"
 })
