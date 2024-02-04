@@ -1,10 +1,8 @@
-
-import type { Emitter } from 'tone';
 <template>
-  <div class="flex h-8 items-center justify-center text-lg text-gray-900">
+  <div class="flex h-8 items-center justify-center text-lg text-gray-100">
     <button
       title="Previous Page"
-      class="disabled:color-gray-700 hover:color-gray-400 size-8 transition-all disabled:cursor-not-allowed disabled:opacity-40"
+      class="disabled:color-gray-300 hover:color-gray-400 size-8 transition-all disabled:cursor-not-allowed disabled:opacity-40"
       :disabled="current === 1"
       @click="update(current - 1, 0)"
     >
@@ -13,7 +11,7 @@ import type { Emitter } from 'tone';
     <button
       v-for="(i, idx) in pages"
       :key="i"
-      class="disabled:color-gray-700 hover:color-gray-400 size-8 text-center transition-all"
+      class="hover:color-teal-300 size-8 text-center transition-all"
       :class="{
         'color-teal-500': i === current,
         'underline': i === current
@@ -30,17 +28,17 @@ import type { Emitter } from 'tone';
     <button
       title="Next Page"
       :disabled="current === maxPage"
-      class="disabled:color-gray-700 hover:color-gray-400 size-8 transition-all disabled:cursor-not-allowed disabled:opacity-40"
+      class="disabled:color-gray-300 hover:color-gray-400 size-8 transition-all disabled:cursor-not-allowed disabled:opacity-40"
       @click="update(current + 1, 0)"
     >
       <div class="i-ph:caret-right w-1em h-1em m-auto" />
     </button>
-    <div class="ml-2 flex items-center justify-center">
-      <span class="text-base text-gray-700">{{ (current - 1) * size + 1 }} - {{ Math.min((current - 1) * size + size,
+    <div class="ml-2 flex h-8 items-center justify-center text-base text-gray-300">
+      {{ (current - 1) * size + 1 }} - {{ Math.min((current - 1) * size + size,
         total) }}
-        of {{
-          total
-        }}</span>
+      of {{
+        total
+      }}
     </div>
   </div>
 </template>

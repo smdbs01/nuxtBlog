@@ -1,11 +1,11 @@
 <template>
-  <div class="bg-coolgray-200 relative flex size-full flex-col items-center p-4 text-gray-800">
-    <h1 class="mb-6 mt-2 text-3xl font-bold">
+  <div class="relative flex size-full flex-col items-center bg-gray-800 p-4 text-gray-200">
+    <h1 class="mb-6 mt-2 text-3xl font-bold tracking-wider">
       Post Management
     </h1>
     <table class="rounded-2 border-spacing-none w-[90%] border-separate">
       <thead>
-        <tr class="">
+        <tr class="tracking-wider">
           <th class="w-[5%]">
             #
           </th>
@@ -49,7 +49,7 @@
           <td class="">
             <NuxtLink
               :to="`/post/${post.id}`"
-              class="border-b-(1 gray-400 dashed) hover:border-b-(gray-500 solid) transition-all hover:text-gray-400 "
+              class="border-b-(1 gray-400 dashed) hover:border-b-(gray-500 solid) tracking-wider transition-all hover:text-gray-400 "
             >
               {{ post.title }}
             </NuxtLink>
@@ -75,21 +75,24 @@
           <td class="text-center">
             <div class="flex justify-center gap-4">
               <button
-                class="hover:text-coolGray-100 flex items-center gap-1 rounded-md border-2 px-2 py-1 text-gray-800 transition-all hover:bg-blue-700"
+                class="focus:text-coolGray-700 hover:text-coolGray-700 flex items-center gap-1 rounded-md border-2 border-blue-300 px-2 py-1 transition-all hover:bg-blue-300 focus:bg-blue-300 focus:outline-none"
+                @click="editPost"
               >
                 <div class="i-ph:pencil" />
                 <span class="font-semibold ">Edit</span>
               </button>
 
               <button
-                class="hover:text-coolGray-100 flex items-center gap-1 rounded-md border-2 px-2 py-1 text-gray-800 transition-all hover:bg-red-700"
+                class="focus:text-coolGray-700 hover:text-coolGray-700 flex items-center gap-1 rounded-md border-2 border-red-300 px-2 py-1 transition-all hover:bg-red-300 focus:bg-red-300 focus:outline-none"
+                @click="deletePost"
               >
                 <div class="i-ph:trash" />
                 <span class="font-semibold ">Delete</span>
               </button>
 
               <button
-                class="hover:text-coolGray-100 flex items-center gap-1 rounded-md border-2 px-2 py-1 text-gray-800 transition-all hover:bg-green-700"
+                class="focus:text-coolGray-700 hover:text-coolGray-700 flex items-center gap-1 rounded-md border-2 border-green-300 px-2 py-1 transition-all hover:bg-green-300 focus:bg-green-300 focus:outline-none"
+                @click="viewPost"
               >
                 <div class="i-ph:eye" />
                 <span class="font-semibold ">View</span>
@@ -99,6 +102,32 @@
         </tr>
       </tbody>
     </table>
+    <AdminPopupWindow
+      v-if="showEdit"
+      @cancel="showEdit = false"
+    >
+      edit
+    </AdminPopupWindow>
+    <AdminPopupWindow
+      v-if="showDelete"
+      @cancel="showDelete = false"
+    >
+      <template #content>
+        <div class="flex flex-col items-center gap-1 text-gray-200">
+          <span>
+            Are you sure you want to delete this post?
+          </span>
+          <span>Consider <b class="text-blue-300">unpublishing</b> it instead.</span>
+        </div>
+      </template>
+    </AdminPopupWindow>
+    <AdminPopupWindow
+      v-if="showView"
+      @cancel="showView = false"
+    >
+      view
+    </AdminPopupWindow>
+
     <AdminPageButton
       class="my-4"
       :total="total"
@@ -129,11 +158,27 @@ const { data: posts, pending, error, refresh } = await useFetch("/api/posts/admi
     pageSize: pageSize
   },
 })
+
+const showEdit = ref(false)
+const showDelete = ref(false)
+const showView = ref(false)
+
+const editPost = () => {
+  showEdit.value = true
+}
+
+const deletePost = () => {
+  showDelete.value = true
+}
+
+const viewPost = () => {
+  showView.value = true
+}
 </script>
 
 <style scoped>
 table th {
-  @apply px-4 py-3 border-l border-t border-gray-300 bg-gray-200;
+  @apply px-4 py-3 border-l border-t border-gray-600 bg-gray-700;
 }
 
 table th:last-of-type {
@@ -141,7 +186,7 @@ table th:last-of-type {
 }
 
 table td {
-  @apply px-4 py-2 border-l border-t border-gray-300 bg-gray-100;
+  @apply px-4 py-2 border-l border-t border-gray-600 bg-gray-700;
 }
 
 table tr:last-of-type td {
