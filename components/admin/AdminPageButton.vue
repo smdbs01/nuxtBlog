@@ -1,3 +1,4 @@
+<!-- eslint-disable vue/html-indent -->
 <template>
   <div class="flex h-8 items-center justify-center text-lg text-gray-100">
     <button

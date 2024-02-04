@@ -36,7 +36,7 @@
           </td>
         </tr>
         <LoadingComp
-          v-show="pending"
+          v-if="pending"
           class="absolute"
         />
         <tr
@@ -75,15 +75,15 @@
           <td class="text-center">
             <div class="flex justify-center gap-4">
               <button
-                class="focus:text-coolGray-700 hover:text-coolGray-700 flex items-center gap-1 rounded-md border-2 border-blue-300 px-2 py-1 transition-all hover:bg-blue-300 focus:bg-blue-300 focus:outline-none"
-                @click="editPost"
+                class="flex items-center gap-1 rounded-md border-2 border-blue-300 px-2 py-1 transition-all duration-200 hover:bg-blue-300 hover:text-gray-800 focus:bg-blue-300 focus:text-gray-800 focus:outline-none"
+                @click="editPost(post.id, post.title, post.content, post.published === 1)"
               >
                 <div class="i-ph:pencil" />
                 <span class="font-semibold ">Edit</span>
               </button>
 
               <button
-                class="focus:text-coolGray-700 hover:text-coolGray-700 flex items-center gap-1 rounded-md border-2 border-red-300 px-2 py-1 transition-all hover:bg-red-300 focus:bg-red-300 focus:outline-none"
+                class="flex items-center gap-1 rounded-md border-2 border-red-300 px-2 py-1 transition-all duration-200 hover:bg-red-300 hover:text-gray-800 focus:bg-red-300 focus:text-gray-800 focus:outline-none"
                 @click="deletePost"
               >
                 <div class="i-ph:trash" />
@@ -91,7 +91,7 @@
               </button>
 
               <button
-                class="focus:text-coolGray-700 hover:text-coolGray-700 flex items-center gap-1 rounded-md border-2 border-green-300 px-2 py-1 transition-all hover:bg-green-300 focus:bg-green-300 focus:outline-none"
+                class="flex items-center gap-1 rounded-md border-2 border-green-300 px-2 py-1 transition-all duration-200 hover:bg-green-300 hover:text-gray-800 focus:bg-green-300 focus:text-gray-800 focus:outline-none"
                 @click="viewPost"
               >
                 <div class="i-ph:eye" />
@@ -102,35 +102,43 @@
         </tr>
       </tbody>
     </table>
-    <AdminPopupWindow
-      v-if="showEdit"
-      @cancel="showEdit = false"
+    <LazyAdminPopupWindow
+      v-if="isEdit"
+      @cancel="isEdit = false"
+      @submit="updatePost"
     >
-      edit
-    </AdminPopupWindow>
-    <AdminPopupWindow
-      v-if="showDelete"
-      @cancel="showDelete = false"
+      <AdminMarkdownEdit
+        v-model:content="editContent"
+        v-model:title="editTitle"
+        v-model:published="editPublished"
+        @update-content="(newContent: string) => { editContent = newContent }"
+        @update-title="(newTitle: string) => { editTitle = newTitle }"
+        @update-published="(newPublished: boolean) => { editPublished = !newPublished }"
+      />
+    </LazyAdminPopupWindow>
+
+    <LazyAdminPopupWindow
+      v-if="isDelete"
+      @cancel="isDelete = false"
     >
-      <template #content>
-        <div class="flex flex-col items-center gap-1 text-gray-200">
-          <span>
-            Are you sure you want to delete this post?
-          </span>
-          <span>Consider <b class="text-blue-300">unpublishing</b> it instead.</span>
-        </div>
-      </template>
-    </AdminPopupWindow>
-    <AdminPopupWindow
-      v-if="showView"
-      @cancel="showView = false"
+      <div class="flex flex-col items-center gap-1 text-gray-200">
+        <span>
+          Are you sure you want to delete this post?
+        </span>
+        <span>Consider <b class="text-blue-300">unpublishing</b> it instead.</span>
+      </div>
+    </LazyAdminPopupWindow>
+
+    <LazyAdminPopupWindow
+      v-if="isView"
+      @cancel="isView = false"
     >
       view
-    </AdminPopupWindow>
+    </LazyAdminPopupWindow>
 
     <AdminPageButton
       class="my-4"
-      :total="total"
+      :total="total || 0"
       :current="currentPage"
       :size="pageSize"
       @update-page="(i) => {
@@ -140,7 +148,7 @@
   </div>
 </template>
 
-<script setup>
+<script setup lang="ts">
 definePageMeta({
   middleware: [
     "admin",
@@ -159,20 +167,60 @@ const { data: posts, pending, error, refresh } = await useFetch("/api/posts/admi
   },
 })
 
-const showEdit = ref(false)
-const showDelete = ref(false)
-const showView = ref(false)
+const isEdit = ref(false)
+const isDelete = ref(false)
+const isView = ref(false)
 
-const editPost = () => {
-  showEdit.value = true
+const activePostID = ref(0)
+const editTitle = ref("")
+const editContent = ref("")
+const editPublished = ref(false)
+const editPost = (id: number, title: string, content: string, published: boolean) => {
+  activePostID.value = id
+  editTitle.value = title
+  editContent.value = content
+  editPublished.value = published
+
+  isEdit.value = true
+}
+
+const updatePost = async () => {
+  console.log(editTitle.value);
+  console.log(editContent.value);
+  console.log(editPublished.value);
+
+  if (activePostID.value === 0) {
+    // new post
+    await useFetch("/api/posts/admin", {
+      method: "POST",
+      body: {
+        title: editTitle.value,
+        content: editContent.value,
+        published: editPublished.value ? 1 : 0
+      }
+    })
+    refreshTotal()
+  } else {
+    await useFetch(`/api/posts/admin/${activePostID.value}`, {
+      method: "PUT",
+      body: {
+        title: editTitle.value,
+        content: editContent.value,
+        published: editPublished.value ? 1 : 0,
+      }
+    })
+  }
+
+  refresh()
+  isEdit.value = false
 }
 
 const deletePost = () => {
-  showDelete.value = true
+  isDelete.value = true
 }
 
 const viewPost = () => {
-  showView.value = true
+  isView.value = true
 }
 </script>
 

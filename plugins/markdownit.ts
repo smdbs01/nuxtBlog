@@ -11,7 +11,6 @@ import anchor from "markdown-it-anchor";
 import toc from "markdown-it-toc-done-right";
 import slugify from "@sindresorhus/slugify";
 
-// eslint-disable-next-line no-undef
 export default defineNuxtPlugin(async () => {
   const mdi = markdownit({
     linkify: true,
