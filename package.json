@@ -45,6 +45,7 @@
     "markdown-it-sup": "^2.0.0",
     "markdown-it-toc-done-right": "^4.2.0",
     "mysql2": "^3.8.0",
-    "next-auth": "^4.21.1"
+    "next-auth": "4.21.1",
+    "twemoji": "^14.0.2"
   }
 }

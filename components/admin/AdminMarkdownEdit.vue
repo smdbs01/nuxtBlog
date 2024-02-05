@@ -36,7 +36,7 @@
         <div class="h-full overflow-y-scroll rounded border pl-8 pr-4">
           <div
             class="content"
-            v-html="$parseMD2HTML(contentRef)"
+            v-html="parseMD2HTML(contentRef)"
           />
         </div>
       </div>

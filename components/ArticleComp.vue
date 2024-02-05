@@ -3,14 +3,16 @@
   <article>
     <div
       :class="{ 'opacity-0': isLoading }"
-      class="my-4 flex justify-center text-5xl"
+      class="mb-8 mt-12 flex justify-center text-5xl"
     >
       {{ title }}
     </div>
-    <LoadingComp
-      v-if="isLoading"
-      class="fixed"
-    />
+    <ClientOnly>
+      <LoadingComp
+        v-if="isLoading"
+        class="fixed"
+      />
+    </ClientOnly>
     <div
       ref="contentEl"
       class="content relative w-full"
@@ -113,15 +115,21 @@ article {
 
 /* Headings */
 .content h1 {
-  @apply text-4xl my-12 relative cursor-pointer;
+  @apply text-4xl my-12 relative cursor-pointer underline-offset-14;
+}
+
+.content h1:hover,
+.content h2:hover,
+.content h3:hover {
+  @apply underline;
 }
 
 .content h2 {
-  @apply text-3xl my-8 relative cursor-pointer;
+  @apply text-3xl my-8 relative cursor-pointer underline-offset-10;
 }
 
 .content h3 {
-  @apply text-2xl my-6 relative cursor-pointer;
+  @apply text-2xl my-6 relative cursor-pointer underline-offset-8;
 }
 
 .content h4 {
@@ -139,7 +147,7 @@ article {
 .content h1:hover .header-anchor,
 .content h2:hover .header-anchor,
 .content h3:hover .header-anchor {
-  @apply opacity-100;
+  @apply opacity-100 decoration-none;
 }
 
 .content .header-anchor {
@@ -172,7 +180,7 @@ article {
 
 .content ul li::marker,
 .content ol li::marker {
-  @apply text-gray-400;
+  @apply text-gray-300;
 }
 
 .content ol li {
@@ -181,16 +189,16 @@ article {
 
 /* Blockquotes */
 .content blockquote {
-  @apply px-4 py-2 border-l-4 border-gray-500;
+  @apply px-4 py-2 border-l-4 border-gray-500 text-gray-300;
 }
 
 /* Code */
 .content code {
-  @apply px-2 py-1 rounded-md bg-dark-900 b b-zinc-700 opacity-100;
+  @apply px-2 py-1 rounded-md bg-dark-900 b border-gray-700 opacity-100;
 }
 
 .content pre {
-  @apply px-4 py-2 rounded-md bg-dark-900 b b-zinc-700 overflow-x-auto shadow-md;
+  @apply px-4 py-2 rounded-md bg-dark-900 border border-gray-700 overflow-x-auto shadow-md;
 }
 
 .content pre code {
@@ -203,17 +211,34 @@ article {
 }
 
 .content table th {
-  @apply px-4 py-3 bg-dark-800 font-semibold;
+  @apply px-4 py-3 border-l border-t border-gray-700 bg-dark-900 font-semibold transition-all;
+}
+
+.content table th:last-of-type {
+  @apply border-r;
 }
 
 .content table td {
-  @apply px-4 py-2 bg-zinc-800;
+  @apply px-4 py-2 border-l border-t border-gray-700 bg-dark-500 transition-all;
 }
 
-.content table tbody tr:nth-child(even) td {
-  @apply bg-zinc-900;
+.content table tr:last-of-type td {
+  @apply border-b;
 }
 
+.content table tr td:last-of-type {
+  @apply border-r;
+}
+
+.content table tr:hover th {
+  @apply bg-dark-800;
+}
+
+.content table tr:hover td {
+  @apply bg-opacity-80 bg-dark-300;
+}
+
+/* Table Rounded */
 /* https://stackoverflow.com/a/47318412 */
 .content table th:first-of-type {
   border-top-left-radius: 8px;
@@ -229,6 +254,11 @@ article {
 
 .content table tr:last-of-type td:last-of-type {
   border-bottom-right-radius: 8px;
+}
+
+/* Emojis */
+.content .emoji {
+  @apply inline-block size-[1.2em] mx-0 mt-[0.05em] mb-[0.1em] vertical-[-0.1em];
 }
 
 /* Footnotes */

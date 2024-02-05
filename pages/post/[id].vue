@@ -1,5 +1,5 @@
 <template>
-  <div class="flex min-h-screen w-full flex-col items-center p-2">
+  <div class="flex w-full flex-col items-center p-2">
     <div v-if="error || status === 'error'">
       Clear error here
       <br>
@@ -18,11 +18,8 @@
       <ArticleComp
         :id="post?.id || 0"
         :title="post?.title || ''"
-        :content="$parseMD2HTML(post?.content || '')"
+        :content="parseMD2HTMLWithTOC(post?.content || '')"
       />
-    </div>
-    <div>
-      {{ $route.params.id }}
     </div>
   </div>
 </template>

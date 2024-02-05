@@ -1,8 +1,5 @@
 <template>
-  <div
-    class="rounded-2 hover:bg-coolGray-200 w-full bg-gray-100 p-2 shadow-md transition-all hover:shadow-lg"
-    to="/"
-  >
+  <div class="rounded-2 hover:bg-coolGray-200 w-full bg-gray-100 p-4 shadow-md transition-all hover:shadow-lg">
     <!-- Title -->
     <div>
       <NuxtLink
@@ -14,8 +11,8 @@
     </div>
 
     <!-- Content -->
-    <div class="mt-2">
-      {{ String(post.id) + " " + (post.content.length > 200 ? post.content.substring(0, 300) + "..." : post.content) }}
+    <div class="mt-4">
+      {{ description + (description.length > 200 ? "..." : "") }}
     </div>
 
     <!-- Time -->
@@ -37,18 +34,19 @@
 </template>
 
 <script setup lang="ts">
-import z from 'zod'
-
-const postZ = z.object({
-  id: z.number(),
-  title: z.string(),
-  content: z.string(),
-  createdDate: z.string(),
-  updatedDate: z.string(),
-})
 
 const props = defineProps<{
-  post: z.infer<typeof postZ>
+  post: {
+    id: number,
+    title: string,
+    content: string,
+    createdDate: string,
+    updatedDate: string
+  }
 }>()
+
+const description = computed(() => {
+  return truncateMarkdown(props.post.content, 200)
+})
 
 </script>

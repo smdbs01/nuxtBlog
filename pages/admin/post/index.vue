@@ -1,9 +1,20 @@
 <template>
-  <div class="relative flex size-full flex-col items-center bg-gray-800 p-4 text-gray-200">
+  <div class="relative flex size-full flex-col items-center bg-gray-800 p-4 text-gray-100">
     <h1 class="mb-6 mt-2 text-3xl font-bold tracking-wider">
       Post Management
     </h1>
-    <table class="rounded-2 border-spacing-none w-[90%] border-separate">
+    <div>
+      <!-- Sorting and creating -->
+      <div class="flex gap-4">
+        <button
+          class="rounded-md border-2 border-teal-300 px-2 py-1 transition-all duration-200 hover:bg-teal-300 hover:text-gray-800 focus:bg-teal-300 focus:text-gray-800 focus:outline-none"
+          @click="newPost"
+        >
+          New Post
+        </button>
+      </div>
+    </div>
+    <table class="rounded-2 border-spacing-none mt-4 w-[90%] border-separate">
       <thead>
         <tr class="tracking-wider">
           <th class="w-[5%]">
@@ -46,13 +57,20 @@
           <td class="text-center">
             {{ post.id }}
           </td>
-          <td class="">
+          <td class="font-semibold">
             <NuxtLink
+              v-if="post.published === 1"
               :to="`/post/${post.id}`"
-              class="border-b-(1 gray-400 dashed) hover:border-b-(gray-500 solid) tracking-wider transition-all hover:text-gray-400 "
+              class="border-b-(1 gray-400 dashed) hover:border-b-(gray-500 solid) tracking-wider transition-all hover:text-gray-400"
             >
               {{ post.title }}
             </NuxtLink>
+            <span
+              v-else
+              class="tracking-wider text-gray-300 transition-all"
+            >
+              {{ post.title }}
+            </span>
           </td>
           <td class="text-center">
             {{ parseDateTimeString(post.createdDate) }}
@@ -84,7 +102,7 @@
 
               <button
                 class="flex items-center gap-1 rounded-md border-2 border-red-300 px-2 py-1 transition-all duration-200 hover:bg-red-300 hover:text-gray-800 focus:bg-red-300 focus:text-gray-800 focus:outline-none"
-                @click="deletePost"
+                @click="deletePost(post.id)"
               >
                 <div class="i-ph:trash" />
                 <span class="font-semibold ">Delete</span>
@@ -102,6 +120,17 @@
         </tr>
       </tbody>
     </table>
+
+    <AdminPageButton
+      class="my-4"
+      :total="total || 0"
+      :current="currentPage"
+      :size="pageSize"
+      @update-page="(i) => {
+        currentPage = i
+      }"
+    />
+
     <LazyAdminPopupWindow
       v-if="isEdit"
       @cancel="isEdit = false"
@@ -120,6 +149,7 @@
     <LazyAdminPopupWindow
       v-if="isDelete"
       @cancel="isDelete = false"
+      @submit="confirmDelete"
     >
       <div class="flex flex-col items-center gap-1 text-gray-200">
         <span>
@@ -135,16 +165,6 @@
     >
       view
     </LazyAdminPopupWindow>
-
-    <AdminPageButton
-      class="my-4"
-      :total="total || 0"
-      :current="currentPage"
-      :size="pageSize"
-      @update-page="(i) => {
-        currentPage = i
-      }"
-    />
   </div>
 </template>
 
@@ -156,7 +176,8 @@ definePageMeta({
   layout: "admin"
 })
 
-const { data: total, refresh: refreshTotal } = await useFetch("/api/posts/count")
+const { data: total, refresh: refreshTotal } = await useFetch("/api/posts/admin/count")
+
 const currentPage = ref(1)
 const pageSize = ref(10)
 
@@ -175,6 +196,7 @@ const activePostID = ref(0)
 const editTitle = ref("")
 const editContent = ref("")
 const editPublished = ref(false)
+
 const editPost = (id: number, title: string, content: string, published: boolean) => {
   activePostID.value = id
   editTitle.value = title
@@ -184,11 +206,16 @@ const editPost = (id: number, title: string, content: string, published: boolean
   isEdit.value = true
 }
 
-const updatePost = async () => {
-  console.log(editTitle.value);
-  console.log(editContent.value);
-  console.log(editPublished.value);
+const newPost = () => {
+  activePostID.value = 0
+  editTitle.value = ""
+  editContent.value = ""
+  editPublished.value = false
 
+  isEdit.value = true
+}
+
+const updatePost = async () => {
   if (activePostID.value === 0) {
     // new post
     await useFetch("/api/posts/admin", {
@@ -215,8 +242,20 @@ const updatePost = async () => {
   isEdit.value = false
 }
 
-const deletePost = () => {
+const deletePost = (id: number) => {
+  activePostID.value = id
+
   isDelete.value = true
+}
+
+const confirmDelete = async () => {
+  await useFetch(`/api/posts/admin/${activePostID.value}`, {
+    method: "DELETE"
+  })
+
+  refresh()
+  refreshTotal()
+  isDelete.value = false
 }
 
 const viewPost = () => {
@@ -227,6 +266,11 @@ const viewPost = () => {
 <style scoped>
 table th {
   @apply px-4 py-3 border-l border-t border-gray-600 bg-gray-700;
+}
+
+table tr:hover th,
+table tr:hover td {
+  @apply bg-opacity-80 bg-gray-700;
 }
 
 table th:last-of-type {
