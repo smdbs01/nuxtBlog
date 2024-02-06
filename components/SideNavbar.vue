@@ -2,7 +2,7 @@
   <nav class="flex flex-col items-center bg-gray-700">
     <ul class="flex w-full flex-col gap-1 pt-4">
       <li
-        v-for="({ url, icon }, tabName) in tabs"
+        v-for="{ tabName, url, icon } in tabs"
         :key="url"
         class="flex h-12 w-full items-center px-4"
       >
@@ -25,14 +25,11 @@
   </nav>
 </template>
 
-<script setup>
+<script setup lang="ts">
 
-const tabs = {
-  Dashboard: { url: "/admin", icon: "i-ph:checks" },
-  Posts: { url: "/admin/post", icon: "i-ph:article" },
-  Images: { url: "/admin/image", icon: "i-ph:image" },
-  Account: { url: "/admin/account", icon: "i-ph:user" }
-}
+defineProps<{
+  tabs: { tabName: string, url: string, icon: string }[]
+}>()
 
 
 </script>

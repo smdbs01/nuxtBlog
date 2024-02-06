@@ -4,13 +4,14 @@ import { posts } from "~/server/db/schema";
 
 import { paginationSchema } from "~/server/schema.ts";
 
+import { error } from "~/utils/logger";
+
 export default defineEventHandler(async (event) => {
-  console.log(await getQuery(event));
   const query = await getValidatedQuery(event, (body) =>
     paginationSchema.safeParse(body)
   );
-  console.log(query);
   if (!query.success) {
+    error("Invalid pagination query");
     throw createError({
       statusCode: 400,
       message: "Invalid pagination query",

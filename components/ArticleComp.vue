@@ -1,18 +1,13 @@
 <!-- eslint-disable vue/no-v-html -->
 <template>
   <article>
-    <div
-      :class="{ 'opacity-0': isLoading }"
-      class="mb-8 mt-12 flex justify-center text-5xl"
-    >
+    <div class="mb-4 mt-8 flex justify-center text-5xl">
       {{ title }}
     </div>
-    <ClientOnly>
-      <LoadingComp
-        v-if="isLoading"
-        class="fixed"
-      />
-    </ClientOnly>
+    <LoadingComp
+      v-if="isLoading"
+      class="fixed"
+    />
     <div
       ref="contentEl"
       class="content relative w-full"
@@ -25,7 +20,6 @@
 <script setup lang="ts">
 
 const props = defineProps<{
-  id: number,
   title: string,
   content: string
 }>()
@@ -85,7 +79,6 @@ const checkHeadingsInView = function () {
     }
   })
 }
-
 </script>
 
 <style>
@@ -115,21 +108,21 @@ article {
 
 /* Headings */
 .content h1 {
-  @apply text-4xl my-12 relative cursor-pointer underline-offset-14;
-}
-
-.content h1:hover,
-.content h2:hover,
-.content h3:hover {
-  @apply underline;
+  @apply text-4xl my-10 relative underline-offset-14;
 }
 
 .content h2 {
-  @apply text-3xl my-8 relative cursor-pointer underline-offset-10;
+  @apply text-3xl my-8 relative underline-offset-10;
 }
 
 .content h3 {
-  @apply text-2xl my-6 relative cursor-pointer underline-offset-8;
+  @apply text-2xl my-6 relative underline-offset-8;
+}
+
+.content h1 span:hover,
+.content h2 span:hover,
+.content h3 span:hover {
+  @apply underline cursor-pointer;
 }
 
 .content h4 {
@@ -194,7 +187,7 @@ article {
 
 /* Code */
 .content code {
-  @apply px-2 py-1 rounded-md bg-dark-900 b border-gray-700 opacity-100;
+  @apply px-2 py-1 rounded-md bg-dark-900 b border-gray-700 opacity-100 text-gray-300;
 }
 
 .content pre {
@@ -258,12 +251,12 @@ article {
 
 /* Emojis */
 .content .emoji {
-  @apply inline-block size-[1.2em] mx-0 mt-[0.05em] mb-[0.1em] vertical-[-0.1em];
+  @apply inline-block size-[1em] mx-0 mt-[0.05em] mb-[0.1em] vertical-[-0.1em];
 }
 
 /* Footnotes */
-.content .footnotes {
-  @apply px-4 py-2 rounded-md flex text-sm;
+.content ol.footnotes {
+  @apply px-4 rounded-md flex text-sm;
 }
 
 .content .footnote-ref a {
@@ -271,11 +264,12 @@ article {
 }
 
 .content .footnotes .footnote-backref {
-  @apply ;
+  @apply transition-all bg-opacity-50;
+  ;
 }
 
 .content .footnotes .footnote-backref:hover {
-  @apply bg-teal-400 b-b-0;
+  @apply bg-gray-400 b-b-0;
 }
 
 /* TOC */

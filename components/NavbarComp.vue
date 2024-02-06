@@ -11,7 +11,7 @@
       </div>
       <NuxtLink
         v-if="status === 'unauthenticated'"
-        :to="'/login?redirect=' + $route.fullPath"
+        :to="$route.path === '/' ? '/login' : '/login?redirect=' + $route.path"
       >
         Login
       </NuxtLink>
@@ -21,8 +21,7 @@
 </template>
 
 <script setup>
-const { status, data } = useAuth()
-
+const { status } = useAuth()
 
 </script>
 

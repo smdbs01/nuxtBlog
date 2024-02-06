@@ -1,9 +1,9 @@
 <!-- eslint-disable vue/html-indent -->
 <template>
-  <div class="flex h-6 items-center justify-center gap-2 text-gray-100">
+  <div class="flex h-6 items-center justify-center gap-2 font-semibold text-gray-100">
     <button
       title="Previous Page"
-      class="disabled:color-gray-300 hover:color-gray-400 size-6 transition-all disabled:cursor-not-allowed disabled:opacity-40"
+      class="disabled:color-gray-300 hover:color-gray-400 size-6 transition-all disabled:cursor-not-allowed disabled:opacity-50"
       :disabled="current === 1"
       @click="update(current - 1, 0)"
     >
@@ -18,10 +18,10 @@
     >
       <span
         v-if="i !== -1"
-        class="border-b-teal-300"
+        class="border-b-2 border-transparent"
         :class="{
           'color-teal-500': i === current,
-          'border-b-1': i === current
+          'border-b-teal-300': i === current
         }"
       >{{ i }}</span>
       <div
@@ -32,12 +32,12 @@
     <button
       title="Next Page"
       :disabled="current === maxPage"
-      class="disabled:color-gray-300 hover:color-gray-400 size-8 transition-all disabled:cursor-not-allowed disabled:opacity-40"
+      class="disabled:color-gray-300 hover:color-gray-400 size-8 transition-all disabled:cursor-not-allowed disabled:opacity-50"
       @click="update(current + 1, 0)"
     >
       <div class="i-ph:caret-right w-1em h-1em m-auto" />
     </button>
-    <div class="ml-2 flex h-6 items-center justify-center text-gray-300">
+    <div class="ml-2 flex h-6 items-center justify-center font-normal text-gray-300">
       {{ (current - 1) * size + 1 }} - {{ Math.min((current - 1) * size + size,
         total) }}
       of {{

@@ -7,18 +7,20 @@
     </span>
     <div class="relative flex">
       <button
+        aria-label="Open user menu"
         class="z-10 block size-10 rounded-full bg-white focus:outline-blue-300"
         @click="isOpen = !isOpen"
       />
       <button
         v-if="isOpen"
+        aria-label="Close Menu"
         class="fixed left-0 top-0 size-full cursor-default opacity-0"
         tabindex="-1"
         @click="isOpen = false"
       />
       <ul
         v-if="isOpen"
-        class="rounded-2 w-42 b-gray-600 b absolute left-[-4rem] top-[calc(100%+0.5rem)] flex flex-col items-center bg-gray-800 py-3 text-lg text-gray-100 shadow-md"
+        class="rounded-2 w-42 b-gray-600 b absolute left-[-4rem] top-[calc(100%+0.5rem)] flex flex-col items-center bg-gray-800 py-2 text-lg text-gray-100 shadow-md"
       >
         <li>
           <NuxtLink
@@ -47,7 +49,7 @@
         <li>
           <button
             class="hover:color-green-400 w-full py-2 transition-all duration-100 hover:bg-gray-700"
-            @click="signOut"
+            @click="doSignOut"
           >
             Sign Out
           </button>

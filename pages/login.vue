@@ -1,23 +1,54 @@
 <template>
-  <div class="flex min-h-screen w-full flex-col items-center bg-gray-100">
-    <form @submit.prevent="login">
+  <div class="flex min-h-[calc(100vh-3.75rem)] w-full flex-col items-center justify-center text-gray-100">
+    <form
+      class="w-md flex flex-col gap-2 rounded-md bg-gray-700 p-4"
+      @submit.prevent="login"
+    >
+      <h1 class="text-center text-2xl font-semibold">
+        User system is not finished
+      </h1>
+      <h1 class="text-center text-2xl font-semibold">
+        You should not try to log in
+      </h1>
+      <label
+        for="username"
+        class="mt-2 text-gray-200"
+      >
+        Username
+      </label>
       <input
         v-model="username"
         type="text"
+        placeholder="Username"
+        class="text-dark-800 focus:outline-(offset-0 blue-400 4) w-full rounded border-0 bg-gray-300 px-2 py-1 shadow-none outline-none transition-all"
       >
+      <label
+        for="password"
+        class="mt-2 text-gray-200"
+      >
+        Password
+      </label>
       <input
         v-model="password"
         type="password"
+        placeholder="Password"
+        class="text-dark-800 focus:outline-(offset-0 blue-400 4) w-full rounded border-0 bg-gray-300 px-2 py-1 shadow-none outline-none transition-all"
       >
-      <button type="submit">
-        Login
+      <button
+        type="submit"
+        class="text-dark-800 mt-4 w-full rounded-md bg-green-500 p-1 font-semibold transition-all hover:bg-green-600 focus:bg-green-600"
+      >
+        Log in
       </button>
     </form>
-    <button @click="() => signOut()">
-      Sign Out
-    </button>
-    <pre>{{ status }}</pre>
-    <pre>{{ data }}</pre>
+    <div
+      class="w-sm duration-400 transition-ease-in-out absolute bottom-20 flex h-[5rem] items-center justify-center rounded-md bg-red-400 p-2 text-xl text-white opacity-0 transition-all"
+      :class="{ 'opacity-100': hasErr }"
+      @click="hasErr = false"
+    >
+      <div class="i-ph:warning w-1.5em h-1.5em" />
+      <span class="ml-2">Credential is not correct</span>
+    </div>
   </div>
 </template>
 
@@ -29,11 +60,13 @@ definePageMeta({
   }
 })
 
-const username = ref("admin")
-const password = ref("root")
+const username = ref("user")
+const password = ref("123456")
 
-const { signIn, signOut, status, data } = useAuth()
+const { signIn } = useAuth()
 const route = useRoute()
+const hasErr = ref(false)
+const timerID = ref()
 
 const login = async () => {
   // @ts-ignore
@@ -44,11 +77,21 @@ const login = async () => {
   })
 
   if (error) {
-    console.log(error)
-    return
+    clearTimer()
+    hasErr.value = true
+    setTimer()
   } else {
     await navigateTo(route.query.redirect as string || "/")
   }
 }
 
+const setTimer = () => {
+  timerID.value = setTimeout(() => {
+    hasErr.value = false
+  }, 3000)
+}
+
+const clearTimer = () => {
+  clearTimeout(timerID.value)
+}
 </script>

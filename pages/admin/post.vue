@@ -46,10 +46,7 @@
             No posts
           </td>
         </tr>
-        <LoadingComp
-          v-if="pending"
-          class="absolute"
-        />
+        <LoadingComp v-if="pending" />
         <tr
           v-for="post in posts"
           :key="post.id"
@@ -176,12 +173,12 @@ definePageMeta({
   layout: "admin"
 })
 
-const { data: total, refresh: refreshTotal } = await useFetch("/api/posts/admin/count")
+const { data: total, refresh: refreshTotal } = await useFetch("/api/admin/posts/count")
 
 const currentPage = ref(1)
 const pageSize = ref(10)
 
-const { data: posts, pending, error, refresh } = await useFetch("/api/posts/admin", {
+const { data: posts, pending, refresh } = await useFetch("/api/admin/posts", {
   query: {
     page: currentPage,
     pageSize: pageSize
@@ -218,7 +215,7 @@ const newPost = () => {
 const updatePost = async () => {
   if (activePostID.value === 0) {
     // new post
-    await useFetch("/api/posts/admin", {
+    await useFetch("/api/admin/posts", {
       method: "POST",
       body: {
         title: editTitle.value,
@@ -228,7 +225,7 @@ const updatePost = async () => {
     })
     refreshTotal()
   } else {
-    await useFetch(`/api/posts/admin/${activePostID.value}`, {
+    await useFetch(`/api/admin/posts/${activePostID.value}`, {
       method: "PUT",
       body: {
         title: editTitle.value,
@@ -249,7 +246,7 @@ const deletePost = (id: number) => {
 }
 
 const confirmDelete = async () => {
-  await useFetch(`/api/posts/admin/${activePostID.value}`, {
+  await useFetch(`/api/admin/posts/${activePostID.value}`, {
     method: "DELETE"
   })
 

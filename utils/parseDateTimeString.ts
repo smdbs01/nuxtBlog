@@ -5,6 +5,7 @@
  * @returns the formatted local date and time string
  */
 export default function (isoString: string): string {
+  if (!isoString) return "";
   const date = new Date(isoString);
 
   // Extract date and time components

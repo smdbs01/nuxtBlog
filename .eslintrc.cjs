@@ -1,6 +1,11 @@
 module.exports = {
   root: true,
-  extends: ["@nuxt/eslint-config", "plugin:tailwindcss/recommended"],
+  plugins: ["security-node"],
+  extends: [
+    "@nuxt/eslint-config",
+    "plugin:tailwindcss/recommended",
+    "plugin:security-node/recommended",
+  ],
   rules: {
     "tailwindcss/no-custom-classname": 0,
   },

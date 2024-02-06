@@ -1,5 +1,8 @@
 <template>
-  <div class="z-999 left-0 top-0 flex size-full items-center justify-center bg-gray-500 opacity-50">
+  <div
+    class="z-999 absolute left-0 top-0 flex size-full items-center justify-center bg-gray-500 opacity-0"
+    :class="{ 'opacity-50': isPassTime }"
+  >
     <!-- https://loading.io/css/ -->
     <div class="lds-ellipsis">
       <div />
@@ -10,7 +13,19 @@
   </div>
 </template>
 
-<style>
+<script setup>
+const time = 500
+const isPassTime = ref(false)
+
+onMounted(() => {
+  setTimeout(() => {
+    isPassTime.value = true
+  }, time)
+})
+
+</script>
+
+<style scoped>
 .lds-ellipsis {
   display: inline-block;
   position: relative;

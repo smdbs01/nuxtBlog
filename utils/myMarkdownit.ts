@@ -2,7 +2,7 @@
 import markdownit, { type Token } from "markdown-it";
 // import hljs from "highlight.js";
 import Shiki from "@shikijs/markdown-it";
-import { light as emoji } from "markdown-it-emoji";
+import { full as emoji } from "markdown-it-emoji";
 import sub from "markdown-it-sub";
 import sup from "markdown-it-sup";
 import fn from "markdown-it-footnote";
@@ -10,7 +10,6 @@ import container from "markdown-it-container";
 import anchor from "markdown-it-anchor";
 import toc from "markdown-it-toc-done-right";
 import slugify from "@sindresorhus/slugify";
-import twemoji from "twemoji";
 
 const mdi = markdownit({
   linkify: true,
@@ -49,23 +48,30 @@ const mdi = markdownit({
     slugify: (s) => slugify(s),
   });
 
-mdi.renderer.rules.emoji = function (token, idx) {
-  return twemoji.parse(token[idx].content);
+const proxy = (tokens, idx, options, env, self) =>
+  self.renderToken(tokens, idx, options);
+
+const defaultHeadingOpenRenderer = mdi.renderer.rules.heading_open || proxy;
+mdi.renderer.rules.heading_open = (tokens, idx, options, env, self) => {
+  return `${defaultHeadingOpenRenderer(
+    tokens,
+    idx,
+    options,
+    env,
+    self
+  )}<span class="heading">`;
 };
 
-// const proxy = (tokens, idx, options, env, self) => {
-//   self.renderToken(tokens, idx, options);
-// };
-// const defaultImageRenderer = markdownit().renderer.rules.image || proxy;
-
-// const nuxtImgPlugin = (markdown) => {
-//   markdown.renderer.rules.image = (tokens, idx, options, env, self) => {
-//     tokens[idx].tag = "NuxtImg";
-//     return defaultImageRenderer(tokens, idx, options, env, self);
-//   };
-// };
-
-// mdi.use(nuxtImgPlugin);
+const defaultHeadingCloseRenderer = mdi.renderer.rules.heading_close || proxy;
+mdi.renderer.rules.heading_close = (tokens, idx, options, env, self) => {
+  return `</span>${defaultHeadingCloseRenderer(
+    tokens,
+    idx,
+    options,
+    env,
+    self
+  )}`;
+};
 
 export const parseMD2HTML = (md: string) => {
   return mdi.render(md);

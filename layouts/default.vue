@@ -1,9 +1,12 @@
 <template>
   <div
     style="scrollbar-gutter: stable;"
-    class="min-h-[calc(100vh-3.75rem)]"
+    class="min-h-screen"
   >
     <NavbarComp />
-    <slot />
+    <div class="min-h-[calc(100vh-7.75rem)] w-full">
+      <slot />
+    </div>
+    <FooterComp />
   </div>
 </template>

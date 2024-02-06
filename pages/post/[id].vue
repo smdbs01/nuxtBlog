@@ -1,25 +1,28 @@
 <template>
-  <div class="flex w-full flex-col items-center p-2">
-    <div v-if="error || status === 'error'">
-      Clear error here
-      <br>
-      <button @click="navigateTo('/')">
-        Back to home
-      </button>
-    </div>
-    <LoadingComp
-      v-else-if="pending || status === 'pending'"
-      class="w-full"
+  <div class="relative flex min-h-full w-full flex-col items-center bg-gray-800 p-2">
+    <ErrorComp
+      v-if="error || status === 'error'"
+      :message="error?.message || 'Something went wrong'"
+      :status="error?.statusCode || 500"
     />
+    <LoadingComp v-else-if="pending || status === 'pending'" />
     <div
       v-else
-      class="min-h-[100%] w-full px-4 md:w-[758px]"
+      class="size-full px-4 md:w-[758px]"
     >
       <ArticleComp
-        :id="post?.id || 0"
         :title="post?.title || ''"
         :content="parseMD2HTMLWithTOC(post?.content || '')"
       />
+      <!-- Date -->
+      <div class="mt-2 flex flex-col items-end text-gray-400">
+        <span>
+          Created at: {{ parseDateTimeString(post?.createdDate || "") }}
+        </span>
+        <span v-if="post?.updatedDate !== post?.createdDate">
+          Updated at: {{ parseDateTimeString(post?.updatedDate || "") }}
+        </span>
+      </div>
     </div>
   </div>
 </template>

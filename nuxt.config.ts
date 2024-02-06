@@ -1,9 +1,29 @@
 import { resolve } from "path";
 
 export default defineNuxtConfig({
-  devtools: { enabled: true },
-  modules: ["@unocss/nuxt", "@nuxtjs/color-mode", "@sidebase/nuxt-auth"],
+  vite: {
+    build: {
+      target: ["es2022", "edge89", "firefox89", "chrome89", "safari15"],
+    },
+  },
+  app: {
+    pageTransition: {
+      name: "fade",
+      mode: "out-in",
+    },
+    head: {
+      charset: "utf-8",
+      viewport: "width=device-width, initial-scale=1",
+    },
+  },
   css: ["@unocss/reset/tailwind.css"],
+  modules: [
+    "@unocss/nuxt",
+    "@nuxtjs/color-mode",
+    "@sidebase/nuxt-auth",
+    "nuxt-security",
+    "@nuxt/devtools",
+  ],
   alias: {
     cookie: resolve(__dirname, "node_modules/cookie"),
   },
@@ -15,10 +35,16 @@ export default defineNuxtConfig({
     },
     globalAppMiddleware: true,
   },
+  security: {
+    headers: {
+      contentSecurityPolicy: false,
+      crossOriginEmbedderPolicy: "unsafe-none",
+    },
+  },
   nitro: {
     esbuild: {
       options: {
-        target: "esnext",
+        target: "es2022",
       },
     },
   },
