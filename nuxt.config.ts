@@ -7,11 +7,15 @@ export default defineNuxtConfig({
     MYSQL_PASSWORD: process.env.NUXT_MYSQL_PASSWORD || "root",
     MYSQL_DATABASE: process.env.NUXT_MYSQL_DATABASE || "DB name",
     NEXTAUTH_URL:
-      process.env.NUXT_PUBLIC_PRODUCTION_URL || "http://localhost:3000",
+      (process.env.NODE_ENV === "development"
+        ? process.env.NUXT_PUBLIC_DEVELOPMENT_URL
+        : process.env.NUXT_PUBLIC_PRODUCTION_URL) || "http://localhost:3000",
     NUXT_AUTH_SECRET: process.env.NUXT_AUTH_SECRET || "your secret",
     public: {
       BASE_URL:
-        process.env.NUXT_PUBLIC_PRODUCTION_URL || "http://localhost:3000",
+        (process.env.NODE_ENV === "development"
+          ? process.env.NUXT_PUBLIC_DEVELOPMENT_URL
+          : process.env.NUXT_PUBLIC_PRODUCTION_URL) || "http://localhost:3000",
     },
   },
   vite: {
@@ -43,7 +47,9 @@ export default defineNuxtConfig({
   auth: {
     isEnabled: true,
     baseURL: `${
-      process.env.NUXT_PUBLIC_PRODUCTION_URL || "http://localhost:3000"
+      (process.env.NODE_ENV === "development"
+        ? process.env.NUXT_PUBLIC_DEVELOPMENT_URL
+        : process.env.NUXT_PUBLIC_PRODUCTION_URL) || "http://localhost:3000"
     }/api/auth`,
     provider: {
       type: "authjs",
