@@ -7,7 +7,7 @@ import { eq } from "drizzle-orm";
 const config = useRuntimeConfig();
 
 export default NuxtAuthHandler({
-  secret: config.NUXT_AUTH_SECRET || "Enter your secret here",
+  secret: config.NUXT_AUTH_SECRET,
   pages: {
     signIn: "/login",
   },

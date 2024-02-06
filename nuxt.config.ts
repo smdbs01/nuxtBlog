@@ -42,7 +42,9 @@ export default defineNuxtConfig({
   },
   auth: {
     isEnabled: true,
-    baseURL: process.env.NUXT_PUBLIC_PRODUCTION_URL || "http://localhost:3000",
+    baseURL: `${
+      process.env.NUXT_PUBLIC_PRODUCTION_URL || "http://localhost:3000"
+    }/api/auth`,
     provider: {
       type: "authjs",
     },
@@ -50,10 +52,18 @@ export default defineNuxtConfig({
   },
   security: {
     headers: {
-      contentSecurityPolicy: false,
+      contentSecurityPolicy: false, // No user content
       crossOriginEmbedderPolicy: "unsafe-none",
+      crossOriginOpenerPolicy: "unsafe-none",
+      crossOriginResourcePolicy: "same-origin",
+      originAgentCluster: false,
+      strictTransportSecurity: false, // HTTPS Later
     },
-    xssValidator: false,
+    rateLimiter: {
+      tokensPerInterval: 150,
+      interval: 60000,
+    },
+    xssValidator: false, // No user content
   },
   nitro: {
     esbuild: {
