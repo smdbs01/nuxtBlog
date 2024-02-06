@@ -61,6 +61,9 @@ const maxPage = computed(() => {
 })
 
 const pages = computed(() => {
+  if (maxPage.value === 1) {
+    return [1]
+  }
   const arr = [1]
   for (let i = 2; i < maxPage.value; i++) {
     if (i >= props.current - 2 && i <= props.current + 2) {

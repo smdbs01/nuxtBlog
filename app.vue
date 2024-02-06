@@ -5,6 +5,8 @@
 </template>
 
 <script setup lang="ts">
+const config = useRuntimeConfig()
+
 useSeoMeta({
   title: "smdbs's Blog",
   ogTitle: "smdbs's Blog",
@@ -14,7 +16,7 @@ useSeoMeta({
   twitterDescription: "smdbs's Blog",
   ogImage: 'https://example.com/og-image.png',
   twitterImage: 'https://example.com/twitter-image.png',
-  ogUrl: () => process.env.PRODUCTION_URL || 'https://example.com',
+  ogUrl: config.public.BASE_URL as string || 'https://example.com',
   twitterCard: 'summary_large_image',
 })
 
