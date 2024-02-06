@@ -215,27 +215,32 @@ const newPost = () => {
 const updatePost = async () => {
   if (activePostID.value === 0) {
     // new post
-    await useFetch("/api/admin/posts", {
+    await $fetch("/api/admin/posts", {
       method: "POST",
       body: {
         title: editTitle.value,
         content: editContent.value,
         published: editPublished.value ? 1 : 0
       }
+    }).catch(() => {
+      // do nothing
+    }).then(() => {
+      refreshTotal()
     })
-    refreshTotal()
   } else {
-    await useFetch(`/api/admin/posts/${activePostID.value}`, {
+    await $fetch(`/api/admin/posts/${activePostID.value}`, {
       method: "PUT",
       body: {
         title: editTitle.value,
         content: editContent.value,
         published: editPublished.value ? 1 : 0,
       }
+    }).catch(() => {
+      // do nothing
     })
   }
-
   refresh()
+
   isEdit.value = false
 }
 
@@ -246,12 +251,14 @@ const deletePost = (id: number) => {
 }
 
 const confirmDelete = async () => {
-  await useFetch(`/api/admin/posts/${activePostID.value}`, {
+  await $fetch(`/api/admin/posts/${activePostID.value}`, {
     method: "DELETE"
+  }).catch(() => {
+    // do nothing
+  }).then(() => {
+    refresh()
+    refreshTotal()
   })
-
-  refresh()
-  refreshTotal()
   isDelete.value = false
 }
 

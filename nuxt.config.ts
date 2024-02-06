@@ -40,6 +40,7 @@ export default defineNuxtConfig({
       contentSecurityPolicy: false,
       crossOriginEmbedderPolicy: "unsafe-none",
     },
+    xssValidator: false,
   },
   nitro: {
     esbuild: {
