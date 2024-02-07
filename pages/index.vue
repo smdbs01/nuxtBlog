@@ -27,7 +27,7 @@
       class="my-8"
       :total="total || 0"
       :current="currentPage"
-      :size="10"
+      :size="pageSize"
       @update-page="changePage"
     />
   </div>
@@ -35,17 +35,15 @@
 
 <script setup lang="ts">
 
-definePageMeta({
-  auth: false,
-})
-
 const { data: total } = await useFetch("/api/posts/count")
 
 const currentPage = ref(1)
+const pageSize = 10
 
 const { data: posts, pending } = await useFetch("/api/posts", {
   query: {
-    page: currentPage
+    page: currentPage,
+    pageSize: pageSize,
   }
 })
 

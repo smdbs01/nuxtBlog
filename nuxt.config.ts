@@ -1,9 +1,18 @@
-import { resolve } from "path";
+import { resolve } from "node:path";
 
 export default defineNuxtConfig({
-  vite: {
-    build: {
-      target: ["es2022", "edge89", "firefox89", "chrome89", "safari15"],
+  runtimeConfig: {
+    authJs: {
+      secret: process.env.NUXT_NEXTAUTH_SECRET || "Enter your secret here",
+    },
+    public: {
+      authJs: {
+        baseUrl:
+          process.env.NODE_ENV === "production"
+            ? process.env.NUXT_NEXTAUTH_URL || "http://localhost:3000"
+            : "http://localhost:3000",
+        verifyClientOnEveryRequest: true,
+      },
     },
   },
   app: {
@@ -17,30 +26,31 @@ export default defineNuxtConfig({
     },
   },
   css: ["@unocss/reset/tailwind.css"],
-  modules: [
-    "@unocss/nuxt",
-    "@nuxtjs/color-mode",
-    "@sidebase/nuxt-auth",
-    "nuxt-security",
-    "@nuxt/devtools",
-  ],
   alias: {
     cookie: resolve(__dirname, "node_modules/cookie"),
   },
-  auth: {
-    isEnabled: true,
-    baseURL: process.env.AUTH_BASE_URL || "http://localhost:3000",
-    provider: {
-      type: "authjs",
-    },
-    globalAppMiddleware: true,
-  },
+  modules: [
+    "@unocss/nuxt",
+    "@nuxtjs/color-mode",
+    "@hebilicious/authjs-nuxt",
+    "nuxt-security",
+    "@nuxt/devtools",
+  ],
   security: {
     headers: {
       contentSecurityPolicy: false,
-      crossOriginEmbedderPolicy: "unsafe-none",
+      crossOriginEmbedderPolicy: false,
+      crossOriginOpenerPolicy: false,
+      crossOriginResourcePolicy: false,
+      originAgentCluster: false,
+      strictTransportSecurity: false, // TODO HTTPS
     },
     xssValidator: false,
+  },
+  vite: {
+    build: {
+      target: ["es2022", "edge89", "firefox89", "chrome89", "safari15"],
+    },
   },
   nitro: {
     esbuild: {

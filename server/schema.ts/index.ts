@@ -12,3 +12,8 @@ export const postSchema = z.object({
   updatedDate: z.date().default(new Date()),
   published: z.number().min(0).max(1),
 });
+
+export const loginSchema = z.object({
+  username: z.string(),
+  password: z.string(),
+});

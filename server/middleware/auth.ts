@@ -1,4 +1,4 @@
-import { getServerSession } from "#auth";
+import { getAuthSession } from "~/server/utils/session";
 import { error } from "~/utils/logger";
 
 export default defineEventHandler(async (event) => {
@@ -6,7 +6,7 @@ export default defineEventHandler(async (event) => {
     return;
   }
 
-  const session = await getServerSession(event);
+  const session = await getAuthSession(event);
   // @ts-expect-error
   if (!session || session.role !== "admin") {
     error("Forbidden access to admin API");

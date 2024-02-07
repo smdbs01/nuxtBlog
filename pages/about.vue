@@ -2,7 +2,7 @@
   <div class="relative flex min-h-full w-full flex-col items-center bg-gray-800 p-2">
     <div class="size-full px-4 md:w-[758px]">
       <ArticleComp
-        :title="'About'"
+        title="About"
         :content="aboutHTML"
       />
     </div>
@@ -24,13 +24,13 @@ const aboutHTML = `
 <p><strong>Other libraries</strong></p>
 <ul>
 <li>
-<p><a href="https://github.com/markdown-it/markdown-it">Markdown-it</a> for <code>MD -&gt; HTML</code> parsing (what you are reading!)</p>
+<p><a href="https://github.com/markdown-it/markdown-it">Markdown-it</a> for <code>MD -&gt; HTML</code> parsing (what you are reading right now!)</p>
 </li>
 <li>
 <p><a href="https://unocss.dev/">UnoCSS</a> for styling</p>
 </li>
 <li>
-<p><a href="https://sidebase.io/nuxt-auth/">Nuxt-Auth</a> for basic authentication</p>
+<p><a href="https://authjs-nuxt.pages.dev/">AuthJS-Nuxt</a> for basic authentication</p>
 </li>
 <li>
 <p><a href="https://nuxt-security.vercel.app/">Nuxt-Security</a> for basic security</p>

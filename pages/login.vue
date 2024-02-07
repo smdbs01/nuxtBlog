@@ -17,6 +17,7 @@
         Username
       </label>
       <input
+        id="username"
         v-model="username"
         type="text"
         placeholder="Username"
@@ -29,6 +30,7 @@
         Password
       </label>
       <input
+        id="password"
         v-model="password"
         type="password"
         placeholder="Password"
@@ -54,9 +56,9 @@
 
 <script setup lang="ts">
 definePageMeta({
+  middleware: "guest-only",
   auth: {
-    unauthenticatedOnly: true,
-    navigateAuthenticatedTo: "/",
+    authneticatedRedirectTo: "/",
   }
 })
 
@@ -70,10 +72,9 @@ const timerID = ref()
 
 const login = async () => {
   // @ts-ignore
-  const { error } = await signIn("credentials", {
+  const { error, status, ok, url } = await signIn("credentials", {
     username: username.value,
     password: password.value,
-    redirect: false
   })
 
   if (error) {
@@ -81,6 +82,7 @@ const login = async () => {
     hasErr.value = true
     setTimer()
   } else {
+    console.log(error, status, ok, url)
     await navigateTo(route.query.redirect as string || "/")
   }
 }

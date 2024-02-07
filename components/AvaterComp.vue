@@ -3,7 +3,7 @@
   <div class="flex items-center">
     <!-- For now, only display user name -->
     <span class="mx-4 border-gray-500 text-lg font-semibold text-gray-200">{{ "Hello, " +
-      data?.user?.name }}
+      session.role }}
     </span>
     <div class="relative flex">
       <button
@@ -39,7 +39,7 @@
           </NuxtLink>
         </li>
         <li
-          v-if="data.role === 'admin'"
+          v-if="session.role === 'admin'"
           @click="isOpen = false"
         >
           <NuxtLink to="/admin">
@@ -60,7 +60,7 @@
 </template>
 
 <script setup>
-const { data, signOut } = useAuth();
+const { session, signOut } = useAuth();
 
 const doSignOut = async () => {
   isOpen.value = false;

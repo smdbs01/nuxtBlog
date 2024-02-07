@@ -14,7 +14,7 @@ useSeoMeta({
   twitterDescription: "smdbs's Blog",
   ogImage: 'https://example.com/og-image.png',
   twitterImage: 'https://example.com/twitter-image.png',
-  ogUrl: () => process.env.PRODUCTION_URL || 'https://example.com',
+  ogUrl: 'https://example.com',
   twitterCard: 'summary_large_image',
 })
 

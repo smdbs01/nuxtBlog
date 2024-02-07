@@ -8,6 +8,7 @@
 
 definePageMeta({
   middleware: [
+    "auth",
     "admin",
   ],
   layout: "admin"
