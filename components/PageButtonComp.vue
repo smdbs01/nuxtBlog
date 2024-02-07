@@ -61,6 +61,9 @@ const maxPage = computed(() => {
 })
 
 const pages = computed(() => {
+  if (maxPage.value === 1) {
+    return [1]
+  }
   const arr = [1]
   if (maxPage.value === 1) {
     return arr

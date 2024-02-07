@@ -43,9 +43,11 @@ definePageMeta({
   auth: false,
 })
 
+const headers = useRequestHeaders(['cookie']) as HeadersInit
 const route = useRoute()
 const { data: post, pending, error, status } = await useFetch(`/api/posts/${route.params.id}`, {
   transform: (data) => postSchema.parse(data),
+  headers
 })
 
 </script>

@@ -18,12 +18,9 @@ export const authOptions: AuthConfig = {
       // @ts-expect-error Custom return type
       async authorize(credentials) {
         try {
-          console.log(0);
           const user = await verify(credentials);
-          console.log(user);
           return user;
         } catch (error) {
-          console.log(error);
           return null;
         }
       },

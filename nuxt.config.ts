@@ -38,14 +38,18 @@ export default defineNuxtConfig({
   ],
   security: {
     headers: {
-      contentSecurityPolicy: false,
+      contentSecurityPolicy: false, // No user content
       crossOriginEmbedderPolicy: false,
-      crossOriginOpenerPolicy: false,
-      crossOriginResourcePolicy: false,
+      crossOriginOpenerPolicy: "unsafe-none",
+      crossOriginResourcePolicy: "same-origin",
       originAgentCluster: false,
       strictTransportSecurity: false, // TODO HTTPS
     },
-    xssValidator: false,
+    rateLimiter: {
+      tokensPerInterval: 150,
+      interval: 60000,
+    },
+    xssValidator: false, // No user content
   },
   vite: {
     build: {

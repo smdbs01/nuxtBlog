@@ -72,7 +72,7 @@ const timerID = ref()
 
 const login = async () => {
   // @ts-ignore
-  const { error, status, ok, url } = await signIn("credentials", {
+  const { error } = await signIn("credentials", {
     username: username.value,
     password: password.value,
   })
@@ -82,7 +82,6 @@ const login = async () => {
     hasErr.value = true
     setTimer()
   } else {
-    console.log(error, status, ok, url)
     await navigateTo(route.query.redirect as string || "/")
   }
 }
