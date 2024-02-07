@@ -12,7 +12,7 @@ export default NuxtAuthHandler({
     signIn: "/login",
   },
   providers: [
-    // @ts-ignore
+    // @ts-expect-error
     CredentialsProvider.default({
       authorize: async function (credentials: {
         username: string;

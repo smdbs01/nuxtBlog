@@ -39,14 +39,16 @@ definePageMeta({
   auth: false,
 })
 
-const { data: total } = await useFetch("/api/posts/count")
+const headers = useRequestHeaders(['cookie']) as HeadersInit
+const { data: total } = await useFetch("/api/posts/count", { headers })
 
 const currentPage = ref(1)
 
 const { data: posts, pending } = await useFetch("/api/posts", {
   query: {
     page: currentPage
-  }
+  },
+  headers
 })
 
 const changePage = (i: number) => {

@@ -173,7 +173,8 @@ definePageMeta({
   layout: "admin"
 })
 
-const { data: total, refresh: refreshTotal } = await useFetch("/api/admin/posts/count")
+const headers = useRequestHeaders(['cookie']) as HeadersInit
+const { data: total, refresh: refreshTotal } = await useFetch("/api/admin/posts/count", { headers })
 
 const currentPage = ref(1)
 const pageSize = ref(10)
@@ -183,6 +184,7 @@ const { data: posts, pending, refresh } = await useFetch("/api/admin/posts", {
     page: currentPage,
     pageSize: pageSize
   },
+  headers
 })
 
 const isEdit = ref(false)

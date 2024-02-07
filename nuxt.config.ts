@@ -18,6 +18,21 @@ export default defineNuxtConfig({
           : process.env.NUXT_PUBLIC_PRODUCTION_URL) || "http://localhost:3000",
     },
   },
+  auth: {
+    isEnabled: true,
+    baseURL: `${
+      (process.env.NODE_ENV === "development"
+        ? process.env.NUXT_PUBLIC_DEVELOPMENT_URL
+        : process.env.NUXT_PUBLIC_PRODUCTION_URL) || "http://localhost:3000"
+    }/api/auth`,
+    provider: {
+      type: "authjs",
+    },
+    globalAppMiddleware: {
+      isEnabled: true,
+      addDefaultCallbackUrl: false,
+    },
+  },
   vite: {
     build: {
       target: ["es2022", "edge89", "firefox89", "chrome89", "safari15"],
@@ -43,18 +58,6 @@ export default defineNuxtConfig({
   ],
   alias: {
     cookie: resolve(__dirname, "node_modules/cookie"),
-  },
-  auth: {
-    isEnabled: true,
-    baseURL: `${
-      (process.env.NODE_ENV === "development"
-        ? process.env.NUXT_PUBLIC_DEVELOPMENT_URL
-        : process.env.NUXT_PUBLIC_PRODUCTION_URL) || "http://localhost:3000"
-    }/api/auth`,
-    provider: {
-      type: "authjs",
-    },
-    globalAppMiddleware: true,
   },
   security: {
     headers: {
