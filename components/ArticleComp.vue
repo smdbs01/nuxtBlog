@@ -1,7 +1,7 @@
 <!-- eslint-disable vue/no-v-html -->
 <template>
   <article>
-    <div class="mb-4 mt-8 flex justify-center text-5xl">
+    <div class="mb-4 mt-8 flex justify-center text-balance text-5xl">
       {{ title }}
     </div>
     <LoadingComp

@@ -45,7 +45,7 @@ export default defineNuxtConfig({
       crossOriginEmbedderPolicy: "unsafe-none",
       crossOriginOpenerPolicy: "unsafe-none",
       crossOriginResourcePolicy: "same-origin",
-      originAgentCluster: "?1",
+      originAgentCluster: false,
       referrerPolicy: "same-origin",
       strictTransportSecurity: false, // TODO HTTPS
     },

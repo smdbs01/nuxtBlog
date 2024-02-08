@@ -88,7 +88,13 @@ export const truncateMarkdown = (md: string, length: number) => {
     let ret = "";
     for (const child of token.children) {
       if (child.type === "text") {
-        ret += child.content;
+        for (const word of child.content.split(" ")) {
+          ret += word;
+          if (ret.length >= length) {
+            break;
+          }
+          ret += " ";
+        }
       } else if (child.type === "inline") {
         ret += parseInline(child, curLength + ret.length);
       }
@@ -108,7 +114,6 @@ export const truncateMarkdown = (md: string, length: number) => {
       if (content.length >= length) {
         break;
       }
-      content += "\n";
     }
   }
 

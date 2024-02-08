@@ -4,7 +4,7 @@
     <div>
       <NuxtLink
         :to="'/post/' + post.id"
-        class="border-b-(2 gray-300) text-xl font-semibold transition-all hover:border-gray-500"
+        class="border-b-(2 gray-300) text-balance text-xl font-semibold transition-all hover:border-gray-500"
       >
         {{ post.title }}
       </NuxtLink>
@@ -12,7 +12,7 @@
 
     <!-- Content -->
     <div class="mt-4">
-      {{ description + (description.length > 200 ? "..." : "") }}
+      {{ description + (description.length > truncateLength ? "..." : "") }}
     </div>
 
     <!-- Time -->
@@ -45,8 +45,9 @@ const props = defineProps<{
   }
 }>()
 
+const truncateLength = 150
 const description = computed(() => {
-  return truncateMarkdown(props.post.content, 200)
+  return truncateMarkdown(props.post.content, truncateLength)
 })
 
 </script>
