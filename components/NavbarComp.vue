@@ -10,12 +10,12 @@
         </NuxtLink>
       </div>
       <NuxtLink
-        v-if="status === 'unauthenticated'"
+        v-if="status !== 'authenticated'"
         :to="$route.path === '/' ? '/login' : '/login?redirect=' + $route.path"
       >
         Login
       </NuxtLink>
-      <AvaterComp v-else />
+      <AvaterComp v-if="status === 'authenticated'" />
     </nav>
   </header>
 </template>

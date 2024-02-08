@@ -7,10 +7,7 @@ export default defineNuxtConfig({
     },
     public: {
       authJs: {
-        baseUrl:
-          process.env.NODE_ENV === "production"
-            ? process.env.NUXT_NEXTAUTH_URL || "http://localhost:3000"
-            : "http://localhost:3000",
+        baseUrl: process.env.NUXT_NEXTAUTH_URL || "http://localhost:3000",
         verifyClientOnEveryRequest: true,
       },
     },
@@ -39,10 +36,17 @@ export default defineNuxtConfig({
   security: {
     headers: {
       contentSecurityPolicy: false, // No user content
-      crossOriginEmbedderPolicy: false,
+      permissionsPolicy: {
+        camera: false,
+        microphone: false,
+        fullscreen: false,
+        geolocation: false,
+      },
+      crossOriginEmbedderPolicy: "unsafe-none",
       crossOriginOpenerPolicy: "unsafe-none",
       crossOriginResourcePolicy: "same-origin",
-      originAgentCluster: false,
+      originAgentCluster: "?1",
+      referrerPolicy: "same-origin",
       strictTransportSecurity: false, // TODO HTTPS
     },
     rateLimiter: {
@@ -50,6 +54,8 @@ export default defineNuxtConfig({
       interval: 60000,
     },
     xssValidator: false, // No user content
+    csrf: false,
+    hidePoweredBy: false,
   },
   vite: {
     build: {

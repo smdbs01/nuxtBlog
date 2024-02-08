@@ -1,5 +1,5 @@
 import { NuxtAuthHandler } from "#auth";
-import type { AuthConfig } from "@auth/core/types";
+import type { AuthConfig, User } from "@auth/core/types";
 import CredentialsProvider from "@auth/core/providers/credentials";
 
 import { verify } from "~/server/utils/loginUtil";
@@ -15,12 +15,20 @@ export const authOptions: AuthConfig = {
   },
   providers: [
     CredentialsProvider({
-      // @ts-expect-error Custom return type
+      name: "Credentials",
       async authorize(credentials) {
         try {
           const user = await verify(credentials);
-          return user;
-        } catch (error) {
+          if (user) {
+            return {
+              name: user.name,
+              role: user.role,
+            } as User;
+          } else {
+            return null;
+          }
+        } catch (err) {
+          console.log("auth error");
           return null;
         }
       },
@@ -28,13 +36,14 @@ export const authOptions: AuthConfig = {
   ],
   callbacks: {
     session({ session, token }) {
-      // @ts-expect-error No role property
-      session.role = token.role;
+      if (session.user) {
+        // @ts-expect-error
+        session.user.role = token.role || "user";
+      }
       return session;
     },
     jwt({ token, user }) {
       if (user) {
-        // @ts-expect-error No role property
         token.role = user.role;
       }
       return token;

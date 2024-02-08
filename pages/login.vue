@@ -49,7 +49,7 @@
       @click="hasErr = false"
     >
       <div class="i-ph:warning w-1.5em h-1.5em" />
-      <span class="ml-2">Credential is not correct</span>
+      <span class="ml-2">Invalid credentials</span>
     </div>
   </div>
 </template>
@@ -71,19 +71,16 @@ const hasErr = ref(false)
 const timerID = ref()
 
 const login = async () => {
-  // @ts-ignore
-  const { error } = await signIn("credentials", {
+  await signIn("credentials", {
+    callbackUrl: route.query.callbackUrl?.toString() || "/",
+    redirect: false,
     username: username.value,
     password: password.value,
-  })
-
-  if (error) {
+  }).catch(() => {
     clearTimer()
     hasErr.value = true
     setTimer()
-  } else {
-    await navigateTo(route.query.redirect as string || "/")
-  }
+  })
 }
 
 const setTimer = () => {

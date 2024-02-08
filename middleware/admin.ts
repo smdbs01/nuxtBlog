@@ -5,7 +5,7 @@ export default defineNuxtRouteMiddleware((to) => {
   }
 
   // @ts-ignore
-  if (to.path === "/admin" && session.value.role !== "admin") {
+  if (to.path === "/admin" && session.value?.user.role !== "admin") {
     return navigateTo("/");
   }
 });

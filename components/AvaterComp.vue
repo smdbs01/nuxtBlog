@@ -3,7 +3,7 @@
   <div class="flex items-center">
     <!-- For now, only display user name -->
     <span class="mx-4 border-gray-500 text-lg font-semibold text-gray-200">{{ "Hello, " +
-      session.role }}
+      session.user.name }}
     </span>
     <div class="relative flex">
       <button
@@ -39,7 +39,7 @@
           </NuxtLink>
         </li>
         <li
-          v-if="session.role === 'admin'"
+          v-if="session.user.role === 'admin'"
           @click="isOpen = false"
         >
           <NuxtLink to="/admin">

@@ -7,8 +7,7 @@ export default defineEventHandler(async (event) => {
   }
 
   const session = await getAuthSession(event);
-  // @ts-expect-error
-  if (!session || session.role !== "admin") {
+  if (!session || session.user?.role !== "admin") {
     error("Forbidden");
     throw createError({
       statusCode: 403,
