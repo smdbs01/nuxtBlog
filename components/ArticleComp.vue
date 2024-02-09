@@ -53,7 +53,9 @@ watch(() => contentEl.value, () => {
     })
 
     contentEl.value.querySelectorAll('h1, h2, h3').forEach(heading => {
-      heading.addEventListener('click', function (e) {
+      const span = heading.querySelector('span.heading')
+      if (!span) return
+      span.addEventListener('click', function (e) {
         e.preventDefault();
         router.replace({ hash: "#" + heading.id })
         myScrollTo(heading as HTMLElement, 80)
@@ -186,16 +188,13 @@ article {
 }
 
 /* Code */
-.content code {
-  @apply px-2 py-1 rounded-md bg-dark-900 b border-gray-700 opacity-100 text-gray-300;
+.content code:not(pre code) {
+  /* Inline code */
+  @apply px-2 py-1 rounded-md bg-dark-900 b border-gray-700 opacity-100 text-gray-300 mx-[0.1rem];
 }
 
 .content pre {
   @apply px-4 py-2 rounded-md bg-dark-900 border border-gray-700 overflow-x-auto shadow-md;
-}
-
-.content pre code {
-  @apply bg-transparent b-none p-0;
 }
 
 /* Tables */
@@ -259,13 +258,8 @@ article {
   @apply px-4 rounded-md flex text-sm;
 }
 
-.content .footnote-ref a {
-  @apply b-b-0;
-}
-
 .content .footnotes .footnote-backref {
   @apply transition-all bg-opacity-50;
-  ;
 }
 
 .content .footnotes .footnote-backref:hover {
