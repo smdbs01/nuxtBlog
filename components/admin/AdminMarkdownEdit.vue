@@ -53,7 +53,7 @@
         v-model="publishedRef"
         type="checkbox"
         class="size-5 text-blue-500 focus:border-blue-300 focus:ring"
-        @input="$emit('update-published', publishedRef)"
+        @input="$emit('update-published', !publishedRef)"
       >
     </div>
   </div>

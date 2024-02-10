@@ -1,6 +1,5 @@
 // @ts-nocheck too many un-typed imports
 import markdownit, { type Token } from "markdown-it";
-// import hljs from "highlight.js";
 import Shiki from "@shikijs/markdown-it";
 import { full as emoji } from "markdown-it-emoji";
 import sub from "markdown-it-sub";
@@ -14,14 +13,6 @@ import slugify from "@sindresorhus/slugify";
 const mdi = markdownit({
   linkify: true,
   typographer: true,
-  // highlight: function (str, lang) {
-  //   if (lang && hljs.getLanguage(lang)) {
-  //     try {
-  //       return hljs.highlight(str, { language: lang }).value;
-  //     } catch (__) {}
-  //   }
-  //   return "";
-  // },
 })
   .use(
     await Shiki({
@@ -73,15 +64,34 @@ mdi.renderer.rules.heading_close = (tokens, idx, options, env, self) => {
   )}`;
 };
 
-export const parseMD2HTML = (md: string) => {
+/**
+ * Parses a given markdown string to HTML.
+ *
+ * @param {string} md - The markdown string to be parsed
+ * @return {string} The HTML representation of the parsed markdown
+ */
+export const parseMD2HTML = (md: string): string => {
   return mdi.render(md);
 };
 
-export const parseMD2HTMLWithTOC = (md: string) => {
+/**
+ * Parses the given Markdown content to HTML and includes a table of contents.
+ *
+ * @param {string} md - The Markdown content to be parsed
+ * @return {string} The HTML content with a table of contents
+ */
+export const parseMD2HTMLWithTOC = (md: string): string => {
   return mdi.render("[[toc]]\n" + md);
 };
 
-export const truncateMarkdown = (md: string, length: number) => {
+/**
+ * Truncates a given markdown string to a specified length.
+ *
+ * @param {string} md - the markdown string to truncate
+ * @param {number} length - the maximum length of the truncated string
+ * @return {string} the truncated markdown string
+ */
+export const truncateMarkdown = (md: string, length: number): string => {
   const tokens = mdi.parse(md, {});
 
   const parseInline = (token: Token, curLength: number = 100) => {

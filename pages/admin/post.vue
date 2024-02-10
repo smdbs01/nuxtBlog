@@ -118,7 +118,7 @@
       </tbody>
     </table>
 
-    <AdminPageButton
+    <PageButtonComp
       class="my-4"
       :total="total || 0"
       :current="currentPage"
@@ -139,7 +139,7 @@
         v-model:published="editPublished"
         @update-content="(newContent: string) => { editContent = newContent }"
         @update-title="(newTitle: string) => { editTitle = newTitle }"
-        @update-published="(newPublished: boolean) => { editPublished = !newPublished }"
+        @update-published="(newPublished: boolean) => { editPublished = newPublished }"
       />
     </LazyAdminPopupWindow>
 

@@ -77,6 +77,7 @@ const login = async () => {
     username: username.value,
     password: password.value,
   }).catch(() => {
+    // Reset timer of the error popup
     clearTimer()
     hasErr.value = true
     setTimer()
