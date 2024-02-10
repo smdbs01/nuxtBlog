@@ -2,7 +2,7 @@ import { db } from "~/server/db";
 import { posts } from "~/server/db/schema";
 
 import { eq } from "drizzle-orm";
-import { postSchema } from "~/server/schema.ts";
+import { postSchema } from "~/server/schema";
 
 export default defineEventHandler(async (event) => {
   const id = Number(getRouterParam(event, "id"));

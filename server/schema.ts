@@ -13,6 +13,14 @@ export const postSchema = z.object({
   published: z.number().min(0).max(1),
 });
 
+export const userSchema = z.object({
+  name: z.string(),
+  password: z.string(),
+  role: z.enum(["admin", "user"]),
+  createdDate: z.date().default(new Date()),
+  updatedDate: z.date().default(new Date()),
+});
+
 export const loginSchema = z.object({
   username: z.string(),
   password: z.string(),

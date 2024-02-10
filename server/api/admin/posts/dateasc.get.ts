@@ -2,7 +2,7 @@ import { asc } from "drizzle-orm";
 import { db } from "~/server/db";
 import { posts } from "~/server/db/schema";
 
-import { paginationSchema } from "~/server/schema.ts";
+import { paginationSchema } from "~/server/schema";
 
 export default defineEventHandler(async (event) => {
   const query = await getValidatedQuery(event, (body) =>

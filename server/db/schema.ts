@@ -13,12 +13,8 @@ export const posts = mysqlTable("posts", {
   title: varchar("title", { length: 255 }).notNull(),
   content: text("content").notNull(),
   published: int("published").notNull(),
-  createdDate: timestamp("createdDate", { mode: "date" })
-    .defaultNow()
-    .notNull(),
-  updatedDate: timestamp("updatedDate", { mode: "date" })
-    .defaultNow()
-    .notNull(),
+  createdDate: timestamp("createdDate", { mode: "date" }).notNull(),
+  updatedDate: timestamp("updatedDate", { mode: "date" }).notNull(),
 });
 
 export const users = mysqlTable("users", {
@@ -26,12 +22,8 @@ export const users = mysqlTable("users", {
   name: varchar("name", { length: 255 }).notNull().unique(),
   password: varchar("password", { length: 255 }).notNull(),
   role: varchar("role", { length: 10, enum: ["admin", "user"] }).notNull(),
-  createdDate: timestamp("createdDate", { mode: "date" })
-    .defaultNow()
-    .notNull(),
-  updatedDate: timestamp("updatedDate", { mode: "date" })
-    .defaultNow()
-    .notNull(),
+  createdDate: timestamp("createdDate", { mode: "date" }).notNull(),
+  updatedDate: timestamp("updatedDate", { mode: "date" }).notNull(),
 });
 
 export const comments = mysqlTable("comments", {
@@ -43,10 +35,6 @@ export const comments = mysqlTable("comments", {
     .notNull()
     .references(() => users.id),
   content: text("content").notNull(),
-  createdDate: timestamp("createdDate", { mode: "date" })
-    .defaultNow()
-    .notNull(),
-  updatedDate: timestamp("updatedDate", { mode: "date" })
-    .defaultNow()
-    .notNull(),
+  createdDate: timestamp("createdDate", { mode: "date" }).notNull(),
+  updatedDate: timestamp("updatedDate", { mode: "date" }).notNull(),
 });

@@ -3,6 +3,7 @@ import type { AuthConfig, User } from "@auth/core/types";
 import CredentialsProvider from "@auth/core/providers/credentials";
 
 import { verify } from "~/server/utils/loginUtil";
+import { error } from "~/utils/logger";
 const runtimeConfig = useRuntimeConfig();
 
 export const authOptions: AuthConfig = {
@@ -28,7 +29,7 @@ export const authOptions: AuthConfig = {
             return null;
           }
         } catch (err) {
-          console.log("auth error");
+          error("Error authenticating");
           return null;
         }
       },

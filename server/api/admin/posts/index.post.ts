@@ -1,7 +1,7 @@
 import { db } from "~/server/db";
 import { posts } from "~/server/db/schema";
 
-import { postSchema } from "~/server/schema.ts";
+import { postSchema } from "~/server/schema";
 
 export default defineEventHandler(async (event) => {
   const body = await readValidatedBody(event, (body) =>
