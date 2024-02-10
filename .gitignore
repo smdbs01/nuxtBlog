@@ -28,3 +28,6 @@ logs
 
 # drizzle migrate files
 server/db/drizzle
+
+# pm2 ecosystem file
+ecosystem.config.*
