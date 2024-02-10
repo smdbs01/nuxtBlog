@@ -1,17 +1,12 @@
 <!-- eslint-disable vue/no-v-html -->
 <template>
   <article>
-    <div class="mb-4 mt-8 flex justify-center text-balance text-5xl">
+    <header class="mb-4 mt-8 flex justify-center text-balance text-5xl">
       {{ title }}
-    </div>
-    <LoadingComp
-      v-if="isLoading"
-      class="fixed"
-    />
+    </header>
     <div
       ref="contentEl"
       class="content relative w-full"
-      :class="{ loaded: !isLoading, 'opacity-0': isLoading }"
       v-html="content"
     />
   </article>
@@ -27,44 +22,41 @@ const props = defineProps<{
 useHead({
   title: props.title,
   meta: [
-    { name: 'description', content: props.content }
+    { name: 'description', content: truncateMarkdown(props.content, 100) }
   ]
 })
 
 const router = useRouter()
 const contentEl: Ref<HTMLDivElement | null> = ref(null)
-const isLoading = ref(true)
 
-watch(() => contentEl.value, () => {
-  if (contentEl.value) {
-    isLoading.value = false
-
-    contentEl.value.querySelectorAll('a[href^="#"]').forEach(anchor => {
-      anchor.setAttribute('tabindex', '-1')
-      anchor.addEventListener('click', function (e) {
-        e.preventDefault();
-        const id = anchor.getAttribute('href') || ''
-        router.replace({ hash: id })
-        myScrollTo(document.querySelector(id), 80)
-        if (document.activeElement instanceof HTMLElement) {
-          document.activeElement.blur()
-        }
-      })
+onMounted(() => {
+  contentEl.value?.querySelectorAll('a[href^="#"]').forEach(anchor => {
+    anchor.setAttribute('tabindex', '-1')
+    anchor.addEventListener('click', function (e) {
+      e.preventDefault();
+      const id = anchor.getAttribute('href') || ''
+      router.replace({ hash: id })
+      myScrollTo(document.querySelector(id), 80)
+      if (document.activeElement instanceof HTMLElement) {
+        document.activeElement.blur()
+      }
     })
+  })
 
-    contentEl.value.querySelectorAll('h1, h2, h3').forEach(heading => {
-      const span = heading.querySelector('span.heading')
-      if (!span) return
-      span.addEventListener('click', function (e) {
-        e.preventDefault();
-        router.replace({ hash: "#" + heading.id })
-        myScrollTo(heading as HTMLElement, 80)
-      })
+  contentEl.value?.querySelectorAll('h1, h2, h3').forEach(heading => {
+    if (heading.querySelectorAll('a').length > 1) return
+
+    const span = heading.querySelector('span.heading')
+    if (!span) return
+    span.addEventListener('click', function (e) {
+      e.preventDefault();
+      router.replace({ hash: "#" + heading.id })
+      myScrollTo(heading as HTMLElement, 80)
     })
+  })
 
-    checkHeadingsInView()
-    window.addEventListener('scroll', checkHeadingsInView)
-  }
+  checkHeadingsInView()
+  window.addEventListener('scroll', checkHeadingsInView)
 })
 
 onBeforeUnmount(() => {
@@ -72,14 +64,21 @@ onBeforeUnmount(() => {
 })
 
 const checkHeadingsInView = function () {
+  let lastNonActive: Element | null = null
   contentEl.value?.querySelectorAll('h1, h2, h3').forEach(heading => {
     const anchor = contentEl.value?.querySelector('a[href="#' + heading.id + '"]')
-    if (heading.getBoundingClientRect().top < window.screen.height && heading.getBoundingClientRect().bottom > 60) {
+    if (heading.getBoundingClientRect().top < window.innerHeight && heading.getBoundingClientRect().bottom > 80) {
       anchor?.classList.add('active')
     } else {
       anchor?.classList.remove('active')
+      if (heading.getBoundingClientRect().top < 60) {
+        lastNonActive = anchor ?? null
+      }
     }
   })
+  if (lastNonActive) {
+    (lastNonActive as HTMLElement).classList.add('active')
+  }
 }
 </script>
 
@@ -90,278 +89,230 @@ article {
 
 .content {
   @apply px-2;
-}
 
-/* Paragraph */
-.content p {
-  @apply my-4;
-}
+  /* Paragraph */
+  p {
+    @apply my-4;
+  }
 
-/* Links */
-.content a {
-  @apply b-b-1 b-b-dashed b-b-gray-400;
-  color: #35DD7C;
-}
+  /* Links */
+  a {
+    @apply b-b-1 b-b-dashed b-b-gray-400;
+    color: #35DD7C;
+  }
 
-.content a:hover {
-  @apply b-b-solid;
-  color: #359323;
-}
+  a:hover {
+    @apply b-b-solid;
+    color: #359323;
+  }
 
-/* Headings */
-.content h1 {
-  @apply text-4xl my-10 relative underline-offset-14;
-}
+  /* Headings */
+  h1 {
+    @apply text-4xl my-10 relative underline-offset-14;
+  }
 
-.content h2 {
-  @apply text-3xl my-8 relative underline-offset-10;
-}
+  h2 {
+    @apply text-3xl my-8 relative underline-offset-10;
+  }
 
-.content h3 {
-  @apply text-2xl my-6 relative underline-offset-8;
-}
+  h3 {
+    @apply text-2xl my-6 relative underline-offset-8;
+  }
 
-.content h1 span:hover,
-.content h2 span:hover,
-.content h3 span:hover {
-  @apply underline cursor-pointer;
-}
+  h4 {
+    @apply text-xl my-4 relative;
+  }
 
-.content h4 {
-  @apply text-xl my-4 relative;
-}
+  h5 {
+    @apply text-lg my-4 relative;
+  }
 
-.content h5 {
-  @apply text-lg my-4 relative;
-}
+  h6 {
+    @apply text-base my-4 relative;
+  }
 
-.content h6 {
-  @apply text-base my-4 relative;
-}
+  h1,
+  h2,
+  h3 {
+    span.heading:hover .header-anchor {
+      @apply opacity-100;
+    }
 
-.content h1:hover .header-anchor,
-.content h2:hover .header-anchor,
-.content h3:hover .header-anchor {
-  @apply opacity-100 decoration-none;
-}
+    /* Underline when there is no links inside the heading */
+    span.heading:hover:not(:has(a:not(.header-anchor))) {
+      @apply underline cursor-pointer;
+    }
 
-.content .header-anchor {
-  @apply w-8 absolute pos-left-[-2rem] opacity-0 b-b-0 text-teal-400 group-hover:opacity-100 transition-all;
-}
+    .header-anchor {
+      @apply w-8 absolute pos-left-[-2rem] opacity-0 b-b-0 text-teal-400 transition-all decoration-none;
+    }
 
-.content .header-anchor:focus {
-  @apply opacity-100 underline underline-blue-400 outline-none;
-}
+    .header-anchor:hover {
+      @apply text-teal-500;
+    }
+  }
 
-/* Images */
-.content img {
-  @apply mx-auto my-4 max-h-[80vw] sm:max-h-lg rounded-4;
-}
+  /* Images */
+  img {
+    @apply mx-auto my-4 max-h-[80vw] sm:max-h-lg rounded-4;
+  }
 
-/* Horizontal Rule */
-.content hr {
-  @apply my-6 b-t-gray-300 opacity-20;
-}
+  /* Horizontal Rule */
+  hr {
+    @apply my-6 b-t-gray-300 opacity-20;
+  }
 
-/* Lists */
-.content ul,
-.content ol {
-  @apply pl-8 my-4;
-}
+  /* Lists */
+  ul,
+  ol {
+    @apply pl-8 my-4;
 
-.content ul li {
-  @apply pl-1 my-4 list-outside list-disc;
-}
+    ::marker {
+      @apply text-gray-300;
+    }
 
-.content ul li::marker,
-.content ol li::marker {
-  @apply text-gray-300;
-}
+    li {
+      @apply my-4 list-outside;
+    }
+  }
 
-.content ol li {
-  @apply pl-2 my-4 list-outside list-decimal;
-}
+  ul li {
+    @apply pl-1 list-disc;
+  }
 
-/* Blockquotes */
-.content blockquote {
-  @apply px-4 py-2 border-l-4 border-gray-500 text-gray-300;
-}
+  ol li {
+    @apply pl-2 list-decimal;
+  }
 
-/* Code */
-.content code:not(pre code) {
-  /* Inline code */
-  @apply px-2 py-1 rounded-md bg-dark-900 b border-gray-700 opacity-100 text-gray-300 mx-[0.1rem];
-}
+  /* Blockquotes */
+  blockquote {
+    @apply px-4 py-2 border-l-4 border-gray-500 text-gray-300;
+  }
 
-.content pre {
-  @apply px-4 py-2 rounded-md bg-dark-900 border border-gray-700 overflow-x-auto shadow-md;
-}
+  /* Code */
+  code:not(pre > code) {
+    /* Inline code */
+    @apply px-2 py-1 rounded-md bg-dark-900 border border-gray-700 opacity-100 text-gray-300 mx-[0.1rem];
+  }
 
-/* Tables */
-.content table {
-  @apply w-full my-4 rounded-2 shadow-md border-separate border-spacing-none;
-}
+  pre {
+    /* Code block */
+    @apply px-4 py-2 rounded-md max-h-[60vh] bg-dark-900 border border-gray-700 overflow-auto shadow-md;
+  }
 
-.content table th {
-  @apply px-4 py-3 border-l border-t border-gray-700 bg-dark-900 font-semibold transition-all;
-}
+  /* Tables */
+  /* Table Rounding: https://stackoverflow.com/a/47318412 */
+  table {
+    @apply w-full my-4 rounded-2 shadow-md border-separate border-spacing-none;
 
-.content table th:last-of-type {
-  @apply border-r;
-}
+    tr {
+      th {
+        @apply px-4 py-3 border-l border-t border-gray-700 bg-dark-900 font-semibold transition-all;
+      }
 
-.content table td {
-  @apply px-4 py-2 border-l border-t border-gray-700 bg-dark-500 transition-all;
-}
+      th:last-of-type {
+        @apply border-r;
+      }
 
-.content table tr:last-of-type td {
-  @apply border-b;
-}
+      td {
+        @apply px-4 py-2 border-l border-t border-gray-700 bg-dark-500 transition-all;
+      }
 
-.content table tr td:last-of-type {
-  @apply border-r;
-}
+      td:last-of-type {
+        @apply border-r;
+      }
+    }
 
-.content table tr:hover th {
-  @apply bg-dark-800;
-}
+    tr:first-of-type {
 
-.content table tr:hover td {
-  @apply bg-opacity-80 bg-dark-300;
-}
+      /* Top row */
+      th:first-of-type {
+        border-top-left-radius: 8px;
+      }
 
-/* Table Rounded */
-/* https://stackoverflow.com/a/47318412 */
-.content table th:first-of-type {
-  border-top-left-radius: 8px;
-}
+      th:last-of-type {
+        border-top-right-radius: 8px;
+      }
+    }
 
-.content table th:last-of-type {
-  border-top-right-radius: 8px;
-}
+    tr:last-of-type {
 
-.content table tr:last-of-type td:first-of-type {
-  border-bottom-left-radius: 8px;
-}
+      /* Bottom row */
+      td {
+        @apply border-b;
+      }
 
-.content table tr:last-of-type td:last-of-type {
-  border-bottom-right-radius: 8px;
-}
+      td:first-of-type {
+        border-bottom-left-radius: 8px;
+      }
 
-/* Emojis */
-.content .emoji {
-  @apply inline-block size-[1em] mx-0 mt-[0.05em] mb-[0.1em] vertical-[-0.1em];
-}
+      td:last-of-type {
+        border-bottom-right-radius: 8px;
+      }
+    }
 
-/* Footnotes */
-.content ol.footnotes {
-  @apply px-4 rounded-md flex text-sm;
-}
+    tr:hover {
+      th {
+        @apply bg-dark-800;
+      }
 
-.content .footnotes .footnote-backref {
-  @apply transition-all bg-opacity-50;
-}
+      td {
+        @apply bg-opacity-80 bg-dark-300;
+      }
+    }
+  }
 
-.content .footnotes .footnote-backref:hover {
-  @apply bg-gray-400 b-b-0;
-}
+  /* Emojis */
+  .emoji {
+    @apply inline-block size-[1em] mx-0 mt-[0.05em] mb-[0.1em] vertical-[-0.1em];
+  }
 
-/* TOC */
-.content .table-of-contents {
-  @apply h-2xl w-[20%] p-l-8 fixed hidden b-l-1 b-l-dashed b-l-gray-600 top-40 overflow-y-auto;
-  left: calc(70% + 7em);
-}
+  /* Footnotes */
+  .footnotes {
+    @apply px-2 rounded-md text-sm;
 
-.content.loaded .table-of-contents {
-  @apply xl:block;
-}
+    .footnote-backref {
+      @apply transition-all bg-opacity-50;
+    }
 
-.content .table-of-contents::before {
-  @apply text-gray-100 font-semibold;
-  content: "Table of Contents";
-}
+    .footnote-backref:hover {
+      @apply bg-gray-400 b-b-0;
+    }
+  }
 
-.content .table-of-contents ol {
-  @apply list-none pl-0 my-1;
-}
+  /* TOC if has any headings */
+  .table-of-contents:has(ol)::before {
+    @apply text-gray-100 font-semibold;
+    content: "Table of Contents";
+  }
 
-.content .table-of-contents>ol>li {
-  @apply pl-1;
-}
+  .table-of-contents:has(ol) {
+    @apply h-2xl w-[20%] p-l-8 fixed hidden xl:block b-l-1 b-l-dashed b-l-gray-600 top-40 left-[calc(70%+7em)] overflow-y-auto;
 
-.content .table-of-contents li {
-  @apply list-none pl-4 my-1;
-}
+    ol {
+      @apply list-none pl-0 my-1;
+    }
 
-.content .table-of-contents ol li a {
-  @apply text-gray-400 b-b-0 transition-color underline-opacity-0;
-}
+    li {
+      @apply list-none pl-4 my-1;
 
-.content .table-of-contents ol li a.active {
-  @apply text-teal-400;
-}
+      a {
+        @apply text-gray-400 b-b-0 transition-color underline-opacity-0;
+      }
 
-.content .table-of-contents ol li a:focus,
-.content .table-of-contents ol li a:hover {
-  @apply text-teal-300;
-}
+      a.active {
+        @apply text-teal-400;
+      }
 
-/* Syntax Highlight Start */
-.content code .hljs-keyword {
-  @apply text-yellow-400;
-}
+      a:focus,
+      a:hover {
+        @apply text-teal-300;
+      }
+    }
+  }
 
-.content code .hljs-number {
-  @apply text-teal-200;
+  .table-of-contents>ol>li {
+    @apply pl-1;
+  }
 }
-
-.content code .hljs-string {
-  @apply text-green-400;
-}
-
-.content code .hljs-title {
-  @apply text-blue-400;
-}
-
-.content code .hljs-title.function_ {
-  @apply text-teal-300;
-}
-
-.content code .hljs-built_in {
-  @apply text-purple-400;
-}
-
-.content code .hljs-literal {
-  @apply text-teal-200;
-}
-
-.content code .hljs-type {
-  @apply text-purple-400;
-}
-
-.content code .hljs-operator {
-  @apply text-pink-400;
-}
-
-.content code .hljs-params {
-  @apply text-blue-400;
-}
-
-.content code .hljs-variable {
-  @apply text-pink-400;
-}
-
-.content code .hljs-variable.language_ {
-  @apply text-fuchsia-300;
-}
-
-.content code .hljs-comment {
-  @apply text-gray-500;
-}
-
-.content code .hljs-doctag {
-  @apply text-yellow-400;
-}
-
-/* Syntax Highlight End */
 </style>
