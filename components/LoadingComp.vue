@@ -1,6 +1,6 @@
 <template>
   <div
-    class="z-999 absolute left-0 top-0 flex size-full items-center justify-center bg-gray-500 opacity-0"
+    class="absolute left-0 top-0 z-999 size-full flex items-center justify-center bg-gray-500 opacity-0"
     :class="{ 'opacity-50': isPassTime }"
   >
     <!-- https://loading.io/css/ -->

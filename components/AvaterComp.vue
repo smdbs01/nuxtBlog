@@ -2,7 +2,7 @@
 <template>
   <div class="flex items-center">
     <!-- For now, only display user name -->
-    <span class="mx-4 border-gray-500 text-lg font-semibold text-gray-200">{{ "Hello, " +
+    <span class="mx-4 border-gray-500 text-lg text-gray-200 font-semibold">{{ "Hello, " +
       session.user.name }}
     </span>
     <div class="relative flex">
@@ -20,7 +20,7 @@
       />
       <ul
         v-if="isOpen"
-        class="rounded-2 w-42 b-gray-600 b absolute left-[-4rem] top-[calc(100%+0.5rem)] flex flex-col items-center bg-gray-800 py-2 text-lg text-gray-100 shadow-md"
+        class="absolute left-[-4rem] top-[calc(100%+0.5rem)] w-42 flex flex-col items-center b b-gray-600 rounded-2 bg-gray-800 py-2 text-lg text-gray-100 shadow-md"
       >
         <li>
           <NuxtLink
@@ -48,7 +48,7 @@
         </li>
         <li>
           <button
-            class="hover:color-green-400 w-full py-2 transition-all duration-100 hover:bg-gray-700"
+            class="w-full py-2 transition-all duration-100 hover:bg-gray-700 hover:color-green-400"
             @click="doSignOut"
           >
             Sign Out

@@ -1,6 +1,6 @@
 <template>
   <div
-    class="bg-gradient-from-gray-900 bg-gradient-to-gray-800 relative flex min-h-[calc(100vh-3.75rem)] w-full flex-col items-center bg-gradient-to-b pt-4"
+    class="relative min-h-[calc(100vh-3.75rem)] w-full flex flex-col items-center bg-gradient-from-gray-900 bg-gradient-to-gray-800 bg-gradient-to-b pt-4"
   >
     <ClientOnly>
       <LoadingComp

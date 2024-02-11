@@ -3,7 +3,7 @@ module.exports = {
   plugins: ["security-node"],
   extends: [
     "@nuxt/eslint-config",
-    "plugin:tailwindcss/recommended",
+    "@unocss",
     "plugin:security-node/recommended",
   ],
   rules: {

@@ -1,5 +1,5 @@
 <template>
-  <div class="rounded-2 hover:bg-coolGray-200 w-full bg-gray-100 p-4 shadow-md transition-all hover:shadow-lg">
+  <div class="w-full rounded-2 bg-gray-100 p-4 shadow-md transition-all hover:bg-coolGray-200 hover:shadow-lg">
     <!-- Title -->
     <div>
       <NuxtLink

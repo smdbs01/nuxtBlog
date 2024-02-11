@@ -4,7 +4,7 @@
     class="h-screen"
   >
     <NavbarComp />
-    <div class="flex h-[calc(100vh-3.75rem)] w-full items-start">
+    <div class="h-[calc(100vh-3.75rem)] w-full flex items-start">
       <SideNavbar
         class="h-full w-[88px] bg-gray-300 md:w-[256px]"
         :tabs="[

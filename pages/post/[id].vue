@@ -1,5 +1,5 @@
 <template>
-  <div class="relative flex min-h-full w-full flex-col items-center bg-gray-800 p-2">
+  <div class="relative min-h-full w-full flex flex-col items-center bg-gray-800 p-2">
     <ErrorComp
       v-if="error || status === 'error'"
       :message="error?.message || 'Something went wrong'"

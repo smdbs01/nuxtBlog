@@ -1,5 +1,5 @@
 <template>
-  <div class="relative flex size-full flex-col items-center bg-gray-800 p-4 text-gray-100">
+  <div class="relative size-full flex flex-col items-center bg-gray-800 p-4 text-gray-100">
     <h1 class="mb-6 mt-2 text-3xl font-bold tracking-wider">
       Post Management
     </h1>
@@ -7,14 +7,14 @@
       <!-- Sorting and creating -->
       <div class="flex gap-4">
         <button
-          class="rounded-md border-2 border-teal-300 px-2 py-1 transition-all duration-200 hover:bg-teal-300 hover:text-gray-800 focus:bg-teal-300 focus:text-gray-800 focus:outline-none"
+          class="border-2 border-teal-300 rounded-md px-2 py-1 transition-all duration-200 focus:bg-teal-300 hover:bg-teal-300 focus:text-gray-800 hover:text-gray-800 focus:outline-none"
           @click="newPost"
         >
           New Post
         </button>
       </div>
     </div>
-    <table class="rounded-2 border-spacing-none mt-4 w-[90%] border-separate">
+    <table class="mt-4 w-[90%] border-separate border-spacing-none rounded-2">
       <thead>
         <tr class="tracking-wider">
           <th class="w-[5%]">
@@ -58,13 +58,13 @@
             <NuxtLink
               v-if="post.published === 1"
               :to="`/post/${post.id}`"
-              class="border-b-(1 gray-400 dashed) hover:border-b-(gray-500 solid) tracking-wider transition-all hover:text-gray-400"
+              class="border-b-(1 gray-400 dashed) tracking-wider transition-all hover:border-b-(gray-500 solid) hover:text-gray-400"
             >
               {{ post.title }}
             </NuxtLink>
             <span
               v-else
-              class="tracking-wider text-gray-300 transition-all"
+              class="text-gray-300 tracking-wider transition-all"
             >
               {{ post.title }}
             </span>
@@ -90,27 +90,27 @@
           <td class="text-center">
             <div class="flex justify-center gap-4">
               <button
-                class="flex items-center gap-1 rounded-md border-2 border-blue-300 px-2 py-1 transition-all duration-200 hover:bg-blue-300 hover:text-gray-800 focus:bg-blue-300 focus:text-gray-800 focus:outline-none"
+                class="flex items-center gap-1 border-2 border-blue-300 rounded-md px-2 py-1 transition-all duration-200 focus:bg-blue-300 hover:bg-blue-300 focus:text-gray-800 hover:text-gray-800 focus:outline-none"
                 @click="editPost(post.id, post.title, post.content, post.published === 1)"
               >
                 <div class="i-ph:pencil" />
-                <span class="font-semibold ">Edit</span>
+                <span class="font-semibold">Edit</span>
               </button>
 
               <button
-                class="flex items-center gap-1 rounded-md border-2 border-red-300 px-2 py-1 transition-all duration-200 hover:bg-red-300 hover:text-gray-800 focus:bg-red-300 focus:text-gray-800 focus:outline-none"
+                class="flex items-center gap-1 border-2 border-red-300 rounded-md px-2 py-1 transition-all duration-200 focus:bg-red-300 hover:bg-red-300 focus:text-gray-800 hover:text-gray-800 focus:outline-none"
                 @click="deletePost(post.id)"
               >
                 <div class="i-ph:trash" />
-                <span class="font-semibold ">Delete</span>
+                <span class="font-semibold">Delete</span>
               </button>
 
               <button
-                class="flex items-center gap-1 rounded-md border-2 border-green-300 px-2 py-1 transition-all duration-200 hover:bg-green-300 hover:text-gray-800 focus:bg-green-300 focus:text-gray-800 focus:outline-none"
+                class="flex items-center gap-1 border-2 border-green-300 rounded-md px-2 py-1 transition-all duration-200 focus:bg-green-300 hover:bg-green-300 focus:text-gray-800 hover:text-gray-800 focus:outline-none"
                 @click="viewPost"
               >
                 <div class="i-ph:eye" />
-                <span class="font-semibold ">View</span>
+                <span class="font-semibold">View</span>
               </button>
             </div>
           </td>

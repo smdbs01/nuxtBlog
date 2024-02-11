@@ -1,6 +1,6 @@
 <template>
-  <header class="h-15 sticky left-0 top-0 z-20 flex w-full items-center justify-center bg-gray-900">
-    <nav class="flex w-full items-center justify-between px-2 sm:w-[60rem]">
+  <header class="sticky left-0 top-0 z-20 h-15 w-full flex items-center justify-center bg-gray-900">
+    <nav class="w-full flex items-center justify-between px-2 sm:w-[60rem]">
       <div class="flex items-center justify-around">
         <NuxtLink to="/">
           Home

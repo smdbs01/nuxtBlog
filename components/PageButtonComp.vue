@@ -1,18 +1,18 @@
 <!-- eslint-disable vue/html-indent -->
 <template>
-  <div class="flex h-8 items-center justify-center gap-2 font-semibold text-gray-100">
+  <div class="h-8 flex items-center justify-center gap-2 text-gray-100 font-semibold">
     <button
       title="Previous Page"
-      class="disabled:color-gray-300 hover:color-gray-400 size-6 transition-all disabled:cursor-not-allowed disabled:opacity-50"
+      class="size-6 transition-all disabled:cursor-not-allowed disabled:color-gray-300 hover:color-gray-400 disabled:opacity-50"
       :disabled="current === 1"
       @click="update(current - 1, 0)"
     >
-      <div class="i-ph:caret-left w-1em h-1em m-auto" />
+      <div class="i-ph:caret-left m-auto h-1em w-1em" />
     </button>
     <button
       v-for="(i, idx) in pages"
       :key="i"
-      class="hover:color-teal-300 size-8 text-center text-lg transition-all"
+      class="size-8 text-center text-lg transition-all hover:color-teal-300"
       :title="i !== -1 ? `Page ${i}` : (idx < currentIndex ? `Page ${pages[idx + 1] - 1}` : `Page ${pages[idx - 1] + 1}`)"
       @click="update(i, idx)"
     >
@@ -26,18 +26,18 @@
       >{{ i }}</span>
       <div
         v-else
-        class="i-ph:dots-three-light w-1em h-1em m-auto"
+        class="i-ph:dots-three-light m-auto h-1em w-1em"
       />
     </button>
     <button
       title="Next Page"
       :disabled="current === maxPage"
-      class="disabled:color-gray-300 hover:color-gray-400 size-8 transition-all disabled:cursor-not-allowed disabled:opacity-50"
+      class="size-8 transition-all disabled:cursor-not-allowed disabled:color-gray-300 hover:color-gray-400 disabled:opacity-50"
       @click="update(current + 1, 0)"
     >
-      <div class="i-ph:caret-right w-1em h-1em m-auto" />
+      <div class="i-ph:caret-right m-auto h-1em w-1em" />
     </button>
-    <div class="ml-2 flex h-8 items-center justify-center font-normal text-gray-300">
+    <div class="ml-2 h-8 flex items-center justify-center text-gray-300 font-normal">
       {{ (current - 1) * size + 1 }} - {{ Math.min((current - 1) * size + size,
         total) }}
       of {{
