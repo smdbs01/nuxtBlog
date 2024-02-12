@@ -1,7 +1,7 @@
 <!-- eslint-disable vue/no-v-html -->
 <template>
   <article>
-    <header class="mb-4 mt-8 flex justify-center text-balance text-5xl">
+    <header class="mb-4 mt-8 flex justify-center text-balance text-5xl line-height-snug">
       {{ title }}
     </header>
     <div
@@ -192,7 +192,7 @@ article {
   /* Code */
   code:not(pre > code) {
     /* Inline code */
-    @apply px-2 py-1 rounded-md bg-dark-900 border border-gray-700 opacity-100 text-gray-300 mx-[0.1rem];
+    @apply px-2 py-[0.1rem] rounded-md bg-dark-900 border border-gray-700 opacity-100 text-gray-300 mx-[0.1rem];
   }
 
   pre {
