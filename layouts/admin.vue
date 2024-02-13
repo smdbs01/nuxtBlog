@@ -11,6 +11,7 @@
           { tabName: 'Admin', url: '/admin', icon: 'i-ph:checks' },
           { tabName: 'Posts', url: '/admin/post', icon: 'i-ph:article' },
           { tabName: 'Images', url: '/admin/image', icon: 'i-ph:image' },
+          { tabName: 'Tags', url: '/admin/tag', icon: 'i-ph:tag' },
           { tabName: 'Account', url: '/admin/account', icon: 'i-ph:user' }
         ]"
       />

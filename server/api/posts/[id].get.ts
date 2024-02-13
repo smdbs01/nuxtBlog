@@ -22,5 +22,16 @@ export default defineEventHandler(async (event) => {
       message: "Post with id " + id + " not found",
     });
   }
-  return postAny[0];
+
+  return db.query.posts.findFirst({
+    where: and(eq(posts.id, id), eq(posts.published, 1)),
+    with: {
+      postTags: {
+        columns: {},
+        with: {
+          tag: true,
+        },
+      },
+    },
+  });
 });

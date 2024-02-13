@@ -1,16 +1,16 @@
 <template>
   <div class="relative size-full flex flex-col items-center bg-gray-800 p-4 text-gray-100">
     <h1 class="mb-6 mt-2 text-3xl font-bold tracking-wider">
-      Post Management
+      Tag Management
     </h1>
     <div>
       <!-- Sorting and creating -->
       <div class="flex gap-4">
         <button
           class="border-2 border-teal-300 rounded-md px-2 py-1 transition-all duration-200 focus:bg-teal-300 hover:bg-teal-300 focus:text-gray-800 hover:text-gray-800 focus:outline-none"
-          @click="newPost"
+          @click="newTag"
         >
-          New Post
+          New Tag
         </button>
       </div>
     </div>
@@ -20,11 +20,17 @@
           <th class="w-[5%]">
             #
           </th>
-          <th class="w-[30%]">
-            Post Title
-          </th>
           <th class="w-[10%]">
-            Tags #
+            Tag Name
+          </th>
+          <th class="w-[20%]">
+            Preview
+          </th>
+          <th class="w-[5%]">
+            Order
+          </th>
+          <th class="w-[5%]">
+            Post Count
           </th>
           <th class="w-[15%]">
             Created Date
@@ -32,72 +38,55 @@
           <th class="w-[15%]">
             Updated Date
           </th>
-          <th class="w-[5%]">
-            Published
-          </th>
-          <th class="w-[20%]">
+          <th class="w-[25%]">
             Actions
           </th>
         </tr>
       </template>
       <template
-        v-if="posts"
+        v-if="tags"
         #tbody
       >
-        <tr v-if="posts.length === 0">
+        <tr v-if="tags.length === 0">
           <td colspan="6">
-            No posts
+            No tags
           </td>
         </tr>
         <LoadingComp v-if="pending" />
+
         <tr
-          v-for="post in posts"
-          :key="post.id"
+          v-for="tag in tags"
+          :key="tag.id"
         >
           <td class="text-center">
-            {{ post.id }}
+            {{ tag.id }}
           </td>
-          <td class="font-semibold">
-            <NuxtLink
-              v-if="post.published === 1"
-              :to="`/post/${post.id}`"
-              class="border-b-(1 gray-400 dashed) tracking-wider transition-all hover:border-b-(gray-500 solid) hover:text-gray-400"
-            >
-              {{ post.title }}
-            </NuxtLink>
-            <span
-              v-else
-              class="text-gray-300 tracking-wider transition-all"
-            >
-              {{ post.title }}
-            </span>
+          <td class="text-center font-semibold">
+            {{ tag.name }}
           </td>
           <td class="text-center">
-            {{ post.postTags.length }}
+            <TagComp
+              :name="tag.name"
+              :color="tag.color"
+            />
           </td>
           <td class="text-center">
-            {{ parseDateTimeString(post.createdDate) }}
+            {{ tag.order }}
           </td>
           <td class="text-center">
-            {{ parseDateTimeString(post.updatedDate) }}
+            {{ tag.postTags.length }}
           </td>
           <td class="text-center">
-            <div class="flex justify-center">
-              <div
-                v-if="post.published"
-                class="i-ph:check size-6"
-              />
-              <div
-                v-else
-                class="i-ph:x size-6"
-              />
-            </div>
+            {{ parseDateTimeString(tag.createdDate) }}
+          </td>
+          <td class="text-center">
+            {{ parseDateTimeString(tag.updatedDate) }}
           </td>
           <td class="text-center">
             <div class="flex justify-center gap-4">
               <button
                 class="flex items-center gap-1 border-2 border-blue-300 rounded-md px-2 py-1 transition-all duration-200 focus:bg-blue-300 hover:bg-blue-300 focus:text-gray-800 hover:text-gray-800 focus:outline-none"
-                @click="editPost(post.id, post.title, post.content, post.published === 1)"
+                @click="editTag(tag.id, tag.name, tag.order, tag.color)"
               >
                 <div class="i-ph:pencil" />
                 <span class="font-semibold">Edit</span>
@@ -105,7 +94,7 @@
 
               <button
                 class="flex items-center gap-1 border-2 border-red-300 rounded-md px-2 py-1 transition-all duration-200 focus:bg-red-300 hover:bg-red-300 focus:text-gray-800 hover:text-gray-800 focus:outline-none"
-                @click="deletePost(post.id)"
+                @click="deleteTag(tag.id)"
               >
                 <div class="i-ph:trash" />
                 <span class="font-semibold">Delete</span>
@@ -113,7 +102,7 @@
 
               <button
                 class="flex items-center gap-1 border-2 border-green-300 rounded-md px-2 py-1 transition-all duration-200 focus:bg-green-300 hover:bg-green-300 focus:text-gray-800 hover:text-gray-800 focus:outline-none"
-                @click="viewPost"
+                @click="viewTag"
               >
                 <div class="i-ph:eye" />
                 <span class="font-semibold">View</span>
@@ -137,15 +126,15 @@
     <LazyAdminPopupWindow
       v-if="isEdit"
       @cancel="isEdit = false"
-      @submit="updatePost"
+      @submit="updateTag"
     >
-      <AdminMarkdownEdit
-        v-model:content="editContent"
-        v-model:title="editTitle"
-        v-model:published="editPublished"
-        @update-content="(newContent: string) => { editContent = newContent }"
-        @update-title="(newTitle: string) => { editTitle = newTitle }"
-        @update-published="(newPublished: boolean) => { editPublished = newPublished }"
+      <AdminTagEdit
+        :name="editName"
+        :order="editOrder"
+        :color="editColor"
+        @update-order="editOrder = $event"
+        @update-name="editName = $event"
+        @update-color="editColor = $event"
       />
     </LazyAdminPopupWindow>
 
@@ -154,11 +143,10 @@
       @cancel="isDelete = false"
       @submit="confirmDelete"
     >
-      <div class="flex flex-col items-center gap-1 text-gray-200">
+      <div class="mb-2 flex flex-col items-center gap-1 text-gray-200">
         <span>
-          Are you sure you want to delete this post?
+          Are you sure you want to delete this tag?
         </span>
-        <span>Consider <b class="text-blue-300">unpublishing</b> it instead.</span>
       </div>
     </LazyAdminPopupWindow>
 
@@ -181,12 +169,12 @@ definePageMeta({
 })
 
 const headers = useRequestHeaders(['cookie']) as HeadersInit
-const { data: total, refresh: refreshTotal } = await useFetch("/api/admin/posts/count", { headers })
+const { data: total, refresh: refreshTotal } = await useFetch("/api/admin/tags/count", { headers })
 
 const currentPage = ref(1)
 const pageSize = ref(10)
 
-const { data: posts, pending, refresh } = await useFetch("/api/admin/posts", {
+const { data: tags, pending, refresh } = await useFetch("/api/admin/tags", {
   query: {
     page: currentPage,
     pageSize: pageSize
@@ -198,38 +186,38 @@ const isEdit = ref(false)
 const isDelete = ref(false)
 const isView = ref(false)
 
-const activePostID = ref(0)
-const editTitle = ref("")
-const editContent = ref("")
-const editPublished = ref(false)
+const activeTagID = ref(0)
+const editName = ref("")
+const editOrder = ref(0)
+const editColor = ref("")
 
-const editPost = (id: number, title: string, content: string, published: boolean) => {
-  activePostID.value = id
-  editTitle.value = title
-  editContent.value = content
-  editPublished.value = published
-
-  isEdit.value = true
-}
-
-const newPost = () => {
-  activePostID.value = 0
-  editTitle.value = ""
-  editContent.value = ""
-  editPublished.value = false
+const editTag = (id: number, name: string, order: number, color: string) => {
+  activeTagID.value = id
+  editName.value = name
+  editOrder.value = order
+  editColor.value = color
 
   isEdit.value = true
 }
 
-const updatePost = async () => {
-  if (activePostID.value === 0) {
+const newTag = () => {
+  activeTagID.value = 0
+  editName.value = "Some Text"
+  editOrder.value = 0
+  editColor.value = "#000000"
+
+  isEdit.value = true
+}
+
+const updateTag = async () => {
+  if (activeTagID.value === 0) {
     // new post
-    await $fetch("/api/admin/posts", {
+    await $fetch("/api/admin/tags", {
       method: "POST",
       body: {
-        title: editTitle.value,
-        content: editContent.value,
-        published: editPublished.value ? 1 : 0
+        name: editName.value,
+        order: editOrder.value,
+        color: editColor.value,
       }
     }).catch(() => {
       // do nothing
@@ -237,12 +225,12 @@ const updatePost = async () => {
       refreshTotal()
     })
   } else {
-    await $fetch(`/api/admin/posts/${activePostID.value}`, {
+    await $fetch(`/api/admin/tags/${activeTagID.value}`, {
       method: "PUT",
       body: {
-        title: editTitle.value,
-        content: editContent.value,
-        published: editPublished.value ? 1 : 0,
+        name: editName.value,
+        order: editOrder.value,
+        color: editColor.value,
       }
     }).catch(() => {
       // do nothing
@@ -253,14 +241,14 @@ const updatePost = async () => {
   isEdit.value = false
 }
 
-const deletePost = (id: number) => {
-  activePostID.value = id
+const deleteTag = (id: number) => {
+  activeTagID.value = id
 
   isDelete.value = true
 }
 
 const confirmDelete = async () => {
-  await $fetch(`/api/admin/posts/${activePostID.value}`, {
+  await $fetch(`/api/admin/tags/${activeTagID.value}`, {
     method: "DELETE"
   }).catch(() => {
     // do nothing
@@ -271,7 +259,7 @@ const confirmDelete = async () => {
   isDelete.value = false
 }
 
-const viewPost = () => {
+const viewTag = () => {
   isView.value = true
 }
 </script>

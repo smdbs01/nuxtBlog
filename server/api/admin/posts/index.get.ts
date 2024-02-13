@@ -1,6 +1,4 @@
-import { desc } from "drizzle-orm";
 import { db } from "~/server/db";
-import { posts } from "~/server/db/schema";
 
 import { paginationSchema } from "~/server/schema";
 
@@ -15,10 +13,17 @@ export default defineEventHandler(async (event) => {
     });
   }
 
-  return await db
-    .select()
-    .from(posts)
-    .orderBy(desc(posts.createdDate), desc(posts.id))
-    .limit(query.data.pageSize)
-    .offset((query.data.page - 1) * query.data.pageSize);
+  return await db.query.posts.findMany({
+    orderBy: (posts, { desc }) => [desc(posts.createdDate), desc(posts.id)],
+    limit: query.data.pageSize,
+    offset: (query.data.page - 1) * query.data.pageSize,
+    with: {
+      postTags: {
+        columns: {},
+        with: {
+          tag: true,
+        },
+      },
+    },
+  });
 });

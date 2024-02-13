@@ -1,4 +1,4 @@
-import { eq, desc } from "drizzle-orm";
+import { eq } from "drizzle-orm";
 import { db } from "~/server/db";
 import { posts } from "~/server/db/schema";
 
@@ -15,11 +15,18 @@ export default defineEventHandler(async (event) => {
     });
   }
 
-  return await db
-    .select()
-    .from(posts)
-    .where(eq(posts.published, 1))
-    .orderBy(desc(posts.createdDate), desc(posts.id))
-    .limit(query.data.pageSize)
-    .offset((query.data.page - 1) * query.data.pageSize);
+  return await db.query.posts.findMany({
+    where: eq(posts.published, 1),
+    orderBy: (posts, { desc }) => [desc(posts.createdDate), desc(posts.id)],
+    limit: query.data.pageSize,
+    offset: (query.data.page - 1) * query.data.pageSize,
+    with: {
+      postTags: {
+        columns: {},
+        with: {
+          tag: true,
+        },
+      },
+    },
+  });
 });

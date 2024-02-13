@@ -10,13 +10,13 @@
       </slot>
       <div class="mt-4 flex justify-around">
         <button
-          class="border border-red-400 rounded-md px-2 py-1 font-semibold transition-all hover:bg-red-400 hover:text-gray-700"
+          class="border border-red-400 rounded-md px-2 py-1 font-semibold transition-all focus:bg-red-400 hover:bg-red-400 focus:text-gray-700 hover:text-gray-700"
           @click="$emit('cancel')"
         >
           {{ cancelText || "Cancel" }}
         </button>
         <button
-          class="border border-green-400 rounded-md px-2 py-1 font-semibold transition-all hover:bg-green-400 hover:text-gray-700"
+          class="border border-green-400 rounded-md px-2 py-1 font-semibold transition-all focus:bg-red-400 hover:bg-green-400 focus:text-gray-700 hover:text-gray-700"
           @click="$emit('submit')"
         >
           {{ submitText || "Submit" }}
