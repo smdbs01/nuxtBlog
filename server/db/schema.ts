@@ -17,6 +17,24 @@ export const posts = mysqlTable("posts", {
   updatedDate: timestamp("updatedDate", { mode: "date" }).notNull(),
 });
 
+export const tags = mysqlTable("tags", {
+  id: serial("id").primaryKey(),
+  disabled: int("disabled").notNull(),
+  name: varchar("name", { length: 255 }).notNull().unique(),
+  createdDate: timestamp("createdDate", { mode: "date" }).notNull(),
+  updatedDate: timestamp("updatedDate", { mode: "date" }).notNull(),
+});
+
+export const postTags = mysqlTable("postTags", {
+  id: serial("id").primaryKey(),
+  postId: bigint("postId", { mode: "number", unsigned: true })
+    .notNull()
+    .references(() => posts.id),
+  tagId: bigint("tagId", { mode: "number", unsigned: true })
+    .notNull()
+    .references(() => tags.id),
+});
+
 export const users = mysqlTable("users", {
   id: serial("id").primaryKey(),
   name: varchar("name", { length: 255 }).notNull().unique(),

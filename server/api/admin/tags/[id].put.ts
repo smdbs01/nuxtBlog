@@ -1,8 +1,8 @@
 import { db } from "~/server/db";
-import { posts } from "~/server/db/schema";
-
+import { tags } from "~/server/db/schema";
 import { eq } from "drizzle-orm";
-import { postSchema } from "~/server/schema";
+
+import { tagSchema } from "~/server/schema";
 
 export default defineEventHandler(async (event) => {
   const id = Number(getRouterParam(event, "id"));
@@ -13,19 +13,18 @@ export default defineEventHandler(async (event) => {
     });
   }
 
-  const postAny = await db.select().from(posts).where(eq(posts.id, id));
-  if (!postAny.length) {
+  const tagAny = await db.select().from(tags).where(eq(tags.id, id));
+  if (!tagAny.length) {
     throw createError({
       statusCode: 404,
       message: "Post with id " + id + " not found",
     });
   }
-  const post = postAny[0];
+  const tag = tagAny[0];
 
   const body = await readValidatedBody(event, (body) =>
-    postSchema.safeParse(body)
+    tagSchema.safeParse(body)
   );
-
   if (!body.success) {
     throw createError({
       statusCode: 400,
@@ -33,10 +32,10 @@ export default defineEventHandler(async (event) => {
     });
   }
 
-  post.title = body.data.title;
-  post.content = body.data.content;
-  post.published = body.data.published ? 1 : 0;
-  post.updatedDate = new Date();
+  tag.name = body.data.name;
+  tag.disabled = body.data.disabled ? 1 : 0;
+  tag.updatedDate = new Date();
 
-  await db.update(posts).set(post).where(eq(posts.id, id));
+  await db.update(tags).set(tag).where(eq(tags.id, id));
+  return "OK";
 });

@@ -13,6 +13,18 @@ export const postSchema = z.object({
   published: z.number().min(0).max(1),
 });
 
+export const tagSchema = z.object({
+  name: z.string(),
+  disabled: z.number().min(0).max(1),
+  createdDate: z.date().default(new Date()),
+  updatedDate: z.date().default(new Date()),
+});
+
+export const postTagSchema = z.object({
+  postId: z.number(),
+  tagId: z.number(),
+});
+
 export const userSchema = z.object({
   name: z.string(),
   password: z.string(),
