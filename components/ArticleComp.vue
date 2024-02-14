@@ -93,6 +93,7 @@ article {
   /* Paragraph */
   p {
     @apply my-4;
+    line-height: 1.8;
   }
 
   /* Links */
