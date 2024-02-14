@@ -97,7 +97,7 @@
             <div class="flex justify-center gap-4">
               <button
                 class="flex items-center gap-1 border-2 border-blue-300 rounded-md px-2 py-1 transition-all duration-200 focus:bg-blue-300 hover:bg-blue-300 focus:text-gray-800 hover:text-gray-800 focus:outline-none"
-                @click="editPost(post.id, post.title, post.content, post.published === 1)"
+                @click="editPost(post.id, post.title, post.content, post.published === 1, post.postTags.map(pt => pt.tag.id))"
               >
                 <div class="i-ph:pencil" />
                 <span class="font-semibold">Edit</span>
@@ -139,13 +139,15 @@
       @cancel="isEdit = false"
       @submit="updatePost"
     >
-      <AdminMarkdownEdit
-        v-model:content="editContent"
-        v-model:title="editTitle"
-        v-model:published="editPublished"
+      <AdminPostEdit
+        :content="editContent"
+        :title="editTitle"
+        :published="editPublished"
+        :initial-tags="editTags"
         @update-content="(newContent: string) => { editContent = newContent }"
         @update-title="(newTitle: string) => { editTitle = newTitle }"
         @update-published="(newPublished: boolean) => { editPublished = newPublished }"
+        @update-tags="(newTags: number[]) => { editTags = newTags }"
       />
     </LazyAdminPopupWindow>
 
@@ -172,6 +174,9 @@
 </template>
 
 <script setup lang="ts">
+import { tags } from '~/server/db/schema';
+
+
 definePageMeta({
   middleware: [
     "auth",
@@ -202,12 +207,14 @@ const activePostID = ref(0)
 const editTitle = ref("")
 const editContent = ref("")
 const editPublished = ref(false)
+const editTags = ref<number[]>([])
 
-const editPost = (id: number, title: string, content: string, published: boolean) => {
+const editPost = (id: number, title: string, content: string, published: boolean, tags: number[]) => {
   activePostID.value = id
   editTitle.value = title
   editContent.value = content
   editPublished.value = published
+  editTags.value = tags
 
   isEdit.value = true
 }
@@ -217,6 +224,7 @@ const newPost = () => {
   editTitle.value = ""
   editContent.value = ""
   editPublished.value = false
+  editTags.value = []
 
   isEdit.value = true
 }
@@ -229,7 +237,8 @@ const updatePost = async () => {
       body: {
         title: editTitle.value,
         content: editContent.value,
-        published: editPublished.value ? 1 : 0
+        published: editPublished.value ? 1 : 0,
+        tags: editTags.value
       }
     }).catch(() => {
       // do nothing
@@ -243,6 +252,7 @@ const updatePost = async () => {
         title: editTitle.value,
         content: editContent.value,
         published: editPublished.value ? 1 : 0,
+        tags: editTags.value
       }
     }).catch(() => {
       // do nothing

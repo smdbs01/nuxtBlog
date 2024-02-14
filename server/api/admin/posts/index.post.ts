@@ -1,7 +1,8 @@
 import { db } from "~/server/db";
-import { posts } from "~/server/db/schema";
+import { postTags, posts } from "~/server/db/schema";
 
 import { postSchema } from "~/server/schema";
+import { desc } from "drizzle-orm";
 
 export default defineEventHandler(async (event) => {
   const body = await readValidatedBody(event, (body) =>
@@ -15,5 +16,18 @@ export default defineEventHandler(async (event) => {
   }
 
   await db.insert(posts).values(body.data);
+
+  if (body.data.tags.length > 0) {
+    const postId = await db
+      .select()
+      .from(posts)
+      .orderBy(desc(posts.id))
+      .limit(1);
+    await db
+      .insert(postTags)
+      .values(
+        body.data.tags.map((tag) => ({ postId: postId[0].id, tagId: tag }))
+      );
+  }
   return "OK";
 });

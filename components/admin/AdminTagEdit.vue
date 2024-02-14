@@ -1,6 +1,5 @@
-<!-- eslint-disable vue/no-v-html -->
 <template>
-  <div class="my-4 w-2xl flex flex-col text-gray-100 space-y-4">
+  <div class="mb-4 w-2xl flex flex-col text-gray-100 space-y-4">
     <!-- Name Input -->
     <div class="w-1/2 flex flex-col gap-2 pr-4">
       <label
@@ -64,6 +63,7 @@
       </div>
       <div class="h-12 w-64 flex items-center rounded-md bg-gray-100 p-2">
         <TagComp
+          :id="id"
           :name="nameRef"
           :color="colorRef"
         />
@@ -76,6 +76,7 @@
 import { getReadability } from '~/utils/myColor'
 
 const props = defineProps<{
+  id: number,
   name: string,
   color: string,
   order: number,

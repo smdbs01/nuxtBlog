@@ -8,9 +8,10 @@ export const paginationSchema = z.object({
 export const postSchema = z.object({
   title: z.string(),
   content: z.string(),
+  published: z.number().min(0).max(1),
+  tags: z.array(z.number()),
   createdDate: z.date().default(new Date()),
   updatedDate: z.date().default(new Date()),
-  published: z.number().min(0).max(1),
 });
 
 export const tagSchema = z.object({

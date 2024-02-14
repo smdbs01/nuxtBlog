@@ -4,7 +4,7 @@
       class="absolute left-0 top-0 size-full flex bg-gray-800 opacity-80"
       @click="$emit('cancel')"
     />
-    <div class="relative z-10 max-w-[80%] flex flex-col border border-gray-400 rounded-md bg-gray-700 p-4 shadow-md">
+    <div class="relative z-10 max-w-[80%] flex flex-col border border-gray-400 rounded-md bg-gray-700 p-4 px-6 shadow-md">
       <slot>
         Placeholder Content
       </slot>

@@ -7,8 +7,9 @@ import {
   timestamp,
   text,
   bigint,
-  unique,
+  primaryKey,
 } from "drizzle-orm/mysql-core";
+import { PrimaryKey } from "drizzle-orm/primary-key";
 
 export const posts = mysqlTable("posts", {
   id: serial("id").primaryKey(),
@@ -39,7 +40,6 @@ export const tagRelations = relations(tags, ({ many }) => ({
 export const postTags = mysqlTable(
   "post_tags",
   {
-    id: serial("id").primaryKey(),
     postId: bigint("postId", { mode: "number", unsigned: true })
       .notNull()
       .references(() => posts.id, { onDelete: "cascade" }),
@@ -47,9 +47,11 @@ export const postTags = mysqlTable(
       .notNull()
       .references(() => tags.id, { onDelete: "cascade" }),
   },
-  (t) => ({
-    unique: unique().on(t.postId, t.tagId),
-  })
+  (t) => {
+    return {
+      pk: primaryKey({ columns: [t.postId, t.tagId] }),
+    };
+  }
 );
 
 export const postTagsRelations = relations(postTags, ({ one }) => ({

@@ -66,6 +66,7 @@
           </td>
           <td class="text-center">
             <TagComp
+              :id="tag.id"
               :name="tag.name"
               :color="tag.color"
             />
@@ -129,6 +130,7 @@
       @submit="updateTag"
     >
       <AdminTagEdit
+        :id="activeTagID"
         :name="editName"
         :order="editOrder"
         :color="editColor"

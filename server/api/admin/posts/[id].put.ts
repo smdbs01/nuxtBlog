@@ -1,5 +1,5 @@
 import { db } from "~/server/db";
-import { posts } from "~/server/db/schema";
+import { postTags, posts } from "~/server/db/schema";
 
 import { eq } from "drizzle-orm";
 import { postSchema } from "~/server/schema";
@@ -39,4 +39,12 @@ export default defineEventHandler(async (event) => {
   post.updatedDate = new Date();
 
   await db.update(posts).set(post).where(eq(posts.id, id));
+  if (body.data.tags.length > 0) {
+    await db.delete(postTags).where(eq(postTags.postId, id));
+    await db
+      .insert(postTags)
+      .values(body.data.tags.map((tag) => ({ postId: id, tagId: tag })));
+  }
+
+  return "OK";
 });
