@@ -23,7 +23,7 @@ export default defineEventHandler(async (event) => {
     });
   }
 
-  return db.query.posts.findFirst({
+  return await db.query.posts.findFirst({
     where: and(eq(posts.id, id), eq(posts.published, 1)),
     with: {
       postTags: {

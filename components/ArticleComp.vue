@@ -16,7 +16,7 @@
 
 const props = defineProps<{
   title: string,
-  content: string
+  content: string,
 }>()
 
 useHead({

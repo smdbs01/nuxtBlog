@@ -174,8 +174,6 @@
 </template>
 
 <script setup lang="ts">
-import { tags } from '~/server/db/schema';
-
 
 definePageMeta({
   middleware: [

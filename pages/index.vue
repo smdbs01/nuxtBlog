@@ -18,8 +18,13 @@
         :key="post.id"
       >
         <PostCardComp
+          :id="post.id"
           class="my-4"
-          :post="post"
+          :title="post.title"
+          :content="post.content"
+          :created-date="post.createdDate"
+          :updated-date="post.updatedDate"
+          :tags="post.postTags.map((postTag) => postTag.tag)"
         />
       </div>
     </div>
@@ -35,7 +40,7 @@
 
 <script setup lang="ts">
 
-const { data: total } = await useFetch("/api/posts/count")
+const { data: total } = await useFetch("/api/postcount")
 
 const currentPage = ref(1)
 const pageSize = 10

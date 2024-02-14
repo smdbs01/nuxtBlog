@@ -14,8 +14,28 @@
         :title="post?.title || ''"
         :content="parseMD2HTMLWithTOC(post?.content || '')"
       />
+      <!-- Tags -->
+      <div
+        v-if="post?.postTags"
+        class="mt-4 flex flex-wrap gap-2 px-4 text-sm text-gray-300 font-semibold"
+      >
+        <span class="">Tags: </span>
+        <div
+          v-for="tag in sortedTags"
+          :key="tag.id"
+          class="group relative cursor-pointer border-l-2 border-l-green-700 px-2"
+        >
+          <span class="relative z-10 transition-all duration-300 group-hover:text-gray-100">
+            {{ tag.name }}
+          </span>
+          <div
+            class="absolute left-0 top-0 h-full w-0 bg-gradient-from-green-700 bg-gradient-to-teal-800 bg-gradient-to-r transition-all duration-300 group-hover:w-full"
+          />
+        </div>
+      </div>
+
       <!-- Date -->
-      <div class="mt-2 flex flex-col items-end text-gray-400">
+      <div class="mt-4 flex flex-col items-end text-gray-400">
         <span>
           Created at: {{ parseDateTimeString(post?.createdDate || "") }}
         </span>
@@ -28,26 +48,15 @@
 </template>
 
 <script setup lang="ts">
-import { z } from "zod"
-
-const postSchema = z.object({
-  id: z.number(),
-  title: z.string(),
-  content: z.string(),
-  createdDate: z.string(),
-  updatedDate: z.string(),
-  published: z.number(),
-})
-
 definePageMeta({
   auth: false,
 })
 
-const headers = useRequestHeaders(['cookie']) as HeadersInit
 const route = useRoute()
-const { data: post, pending, error, status } = await useFetch(`/api/posts/${route.params.id}`, {
-  transform: (data) => postSchema.parse(data),
-  headers
+const { data: post, pending, error, status } = await useFetch(`/api/posts/${route.params.id}`)
+
+const sortedTags = computed(() => {
+  return (post.value?.postTags?.toSorted((a, b) => b.tag.order - a.tag.order))?.map((postTag) => postTag.tag)
 })
 
 </script>
