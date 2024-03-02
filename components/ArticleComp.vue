@@ -187,7 +187,7 @@ article {
 
   /* Blockquotes */
   blockquote {
-    @apply px-4 py-2 border-l-4 border-gray-500 text-gray-300;
+    @apply my-4 px-4 py-2 border-l-4 border-gray-500 text-gray-300;
   }
 
   /* Code */
@@ -198,7 +198,7 @@ article {
 
   pre {
     /* Code block */
-    @apply px-4 py-2 rounded-md max-h-[60vh] bg-dark-900 border border-gray-700 overflow-auto shadow-md;
+    @apply my-4 px-4 py-2 rounded-md max-h-[60vh] bg-dark-900 border border-gray-700 overflow-auto shadow-md;
   }
 
   /* Tables */
