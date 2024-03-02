@@ -160,7 +160,7 @@ article {
 
   /* Horizontal Rule */
   hr {
-    @apply my-6 b-t-gray-300 opacity-20;
+    @apply my-4 b-t-gray-300 opacity-20;
   }
 
   /* Lists */
@@ -173,7 +173,7 @@ article {
     }
 
     li {
-      @apply my-4 list-outside;
+      @apply my-2 list-outside;
     }
   }
 
@@ -193,7 +193,7 @@ article {
   /* Code */
   code:not(pre > code) {
     /* Inline code */
-    @apply px-2 py-[0.1rem] rounded-md bg-dark-900 border border-gray-700 opacity-100 text-gray-300 mx-[0.1rem];
+    @apply px-2 py-[0.15rem] rounded-md bg-dark-900 border border-gray-700 opacity-100 text-gray-300 mx-[0.1rem] whitespace-nowrap;
   }
 
   pre {
