@@ -15,7 +15,7 @@ export default defineEventHandler(async (event) => {
     });
   }
 
-  await db.insert(posts).values(body.data);
+  await db.insert(posts).values({...body.data, createdDate: new Date(), updatedDate: new Date()});
 
   if (body.data.tags.length > 0) {
     const postId = await db

@@ -14,6 +14,6 @@ export default defineEventHandler(async (event) => {
     });
   }
 
-  await db.insert(tags).values(body.data);
+  await db.insert(tags).values({...body.data, createdDate: new Date(), updatedDate: new Date()});
   return "OK";
 });

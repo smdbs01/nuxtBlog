@@ -58,6 +58,13 @@ export default defineEventHandler(async (event) => {
     });
   }
 
-  await db.delete(postTags).where(eq(postTags.id, postTagAny[0].id));
+  await db
+    .delete(postTags)
+    .where(
+      and(
+        eq(postTags.postId, postTagAny[0].postId),
+        eq(postTags.tagId, postTagAny[0].tagId)
+      )
+    );
   return "OK";
 });

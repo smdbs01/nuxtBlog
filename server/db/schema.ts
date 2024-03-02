@@ -9,7 +9,6 @@ import {
   bigint,
   primaryKey,
 } from "drizzle-orm/mysql-core";
-import { PrimaryKey } from "drizzle-orm/primary-key";
 
 export const posts = mysqlTable("posts", {
   id: serial("id").primaryKey(),

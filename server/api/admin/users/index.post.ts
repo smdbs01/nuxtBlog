@@ -25,6 +25,6 @@ export default defineEventHandler(async (event) => {
   }
   body.data.password = await hashPassword(body.data.password);
 
-  await db.insert(users).values(body.data);
+  await db.insert(users).values({...body.data, createdDate: new Date(), updatedDate: new Date()});
   return "OK";
 });
