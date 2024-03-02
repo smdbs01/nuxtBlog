@@ -1,4 +1,5 @@
 <!-- eslint-disable vue/no-v-html -->
+
 <template>
   <div class="h-3xl w-7xl flex flex-col text-gray-100 space-y-4">
     <div class="grid grid-cols-2 gap-x-4 gap-y-2">
@@ -119,14 +120,17 @@
         </header>
         <div
           class="content"
-          v-html="parseMD2HTML(contentRef)"
+          v-html="editContent"
         />
       </div>
     </div>
   </div>
 </template>
 
-<script setup lang="ts">
+<script
+  setup
+  lang="ts"
+>
 const props = defineProps<{
   title: string,
   content: string,
@@ -174,6 +178,10 @@ const selectTag = (tagID: number) => {
   }
   emits('update-tags', activeTagsRef.value)
 }
+
+const editContent = computed(() => {
+  return parseMD2HTML(contentRef.value)
+})
 
 </script>
 

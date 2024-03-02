@@ -71,7 +71,11 @@ mdi.renderer.rules.heading_close = (tokens, idx, options, env, self) => {
  * @return {string} The HTML representation of the parsed markdown
  */
 export const parseMD2HTML = (md: string): string => {
-  return mdi.render(md);
+  try {
+    return mdi.render(md);
+  } catch (e) {
+    return "<h2>Failed to parse markdown</h2><p><b>" + e + "</b></p>";
+  }
 };
 
 /**

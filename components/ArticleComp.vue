@@ -109,15 +109,15 @@ article {
 
   /* Headings */
   h1 {
-    @apply text-4xl my-10 relative underline-offset-14;
+    @apply text-4xl my-8 relative underline-offset-14;
   }
 
   h2 {
-    @apply text-3xl my-8 relative underline-offset-10;
+    @apply text-3xl my-6 relative underline-offset-10;
   }
 
   h3 {
-    @apply text-2xl my-6 relative underline-offset-8;
+    @apply text-2xl my-4 relative underline-offset-8;
   }
 
   h4 {
