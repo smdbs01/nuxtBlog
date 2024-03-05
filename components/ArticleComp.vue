@@ -1,4 +1,5 @@
 <!-- eslint-disable vue/no-v-html -->
+
 <template>
   <article>
     <header class="mb-4 mt-8 flex justify-center text-balance text-5xl line-height-snug">
@@ -12,7 +13,10 @@
   </article>
 </template>
 
-<script setup lang="ts">
+<script
+  setup
+  lang="ts"
+>
 
 const props = defineProps<{
   title: string,
@@ -88,7 +92,7 @@ article {
 }
 
 .content {
-  @apply px-2;
+  @apply px-2 b-t-2 b-t-dashed b-t-gray-600;
 
   /* Paragraph */
   p {
@@ -199,6 +203,35 @@ article {
   pre {
     /* Code block */
     @apply my-4 px-4 py-2 rounded-md max-h-[60vh] bg-dark-900 border border-gray-700 overflow-auto shadow-md;
+    --scrollbar-color-thumb: rgb(55 65 81);
+    --scrollbar-color-track: rgb(12 15 22);
+
+    /* Legacy browsers */
+    &::-webkit-scrollbar {
+      @apply max-w-2 max-h-2 rounded-full;
+    }
+
+    &::-webkit-scrollbar-track {
+      @apply rounded-full m-1;
+      background-color: var(--scrollbar-color-track);
+    }
+
+    &::-webkit-scrollbar-thumb {
+      @apply rounded-full;
+      background-color: var(--scrollbar-color-thumb);
+    }
+
+    &::-webkit-scrollbar-corner {
+      @apply opacity-0;
+    }
+
+    /* New browsers */
+    @supports (scrollbar-width: auto) {
+      & {
+        scrollbar-color: var(--scrollbar-color-thumb) var(--scrollbar-color-track);
+        scrollbar-width: thin;
+      }
+    }
   }
 
   /* Tables */
@@ -281,21 +314,25 @@ article {
     }
   }
 
+
   /* TOC if has any headings */
   .table-of-contents:has(ol)::before {
-    @apply text-gray-100 font-semibold;
+    @apply text-gray-300 font-semibold opacity-90;
     content: "Table of Contents";
   }
 
   .table-of-contents:has(ol) {
-    @apply h-2xl w-[20%] p-l-8 fixed hidden xl:block b-l-1 b-l-dashed b-l-gray-600 top-40 left-[calc(70%+7em)] overflow-y-auto;
+    @apply h-2xl max-w-[21%] pl-8 pr-2 fixed hidden xl:block b-l-1 b-l-style-ridge b-l-gray-600 top-40 right-[calc(10%-8rem)] overflow-y-auto;
+
+    --scrollbar-color-thumb: rgb(107 114 128);
+    --scrollbar-color-track: rgb(55 65 81);
 
     ol {
-      @apply list-none pl-0 my-1;
+      @apply list-none pl-0 my-0.5;
     }
 
     li {
-      @apply list-none pl-4 my-1;
+      @apply list-none pl-4 my-0.5;
 
       a {
         @apply text-gray-400 b-b-0 transition-color underline-opacity-0;
@@ -305,15 +342,37 @@ article {
         @apply text-teal-400;
       }
 
-      a:focus,
       a:hover {
         @apply text-teal-300;
+      }
+    }
+
+    /* Legacy browsers */
+    &::-webkit-scrollbar {
+      @apply max-w-2 max-h-2 rounded-full;
+    }
+
+    &::-webkit-scrollbar-track {
+      @apply rounded-full m-1;
+      background-color: var(--scrollbar-color-track);
+    }
+
+    &::-webkit-scrollbar-thumb {
+      @apply rounded-full;
+      background-color: var(--scrollbar-color-thumb);
+    }
+
+    /* New browsers */
+    @supports (scrollbar-width: auto) {
+      & {
+        scrollbar-color: var(--scrollbar-color-thumb) var(--scrollbar-color-track);
+        scrollbar-width: thin;
       }
     }
   }
 
   .table-of-contents>ol>li {
-    @apply pl-1;
+    @apply pl-0;
   }
 }
 </style>

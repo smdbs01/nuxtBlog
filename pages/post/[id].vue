@@ -8,7 +8,7 @@
     <LoadingComp v-else-if="pending || status === 'pending'" />
     <div
       v-else
-      class="size-full px-4 md:w-[758px]"
+      class="size-full px-4 md:w-[768px]"
     >
       <ArticleComp
         :title="post?.title || ''"
@@ -47,7 +47,10 @@
   </div>
 </template>
 
-<script setup lang="ts">
+<script
+  setup
+  lang="ts"
+>
 definePageMeta({
   auth: false,
 })
