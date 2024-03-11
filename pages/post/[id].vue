@@ -58,6 +58,20 @@ definePageMeta({
 const route = useRoute()
 const { data: post, pending, error, status } = await useFetch(`/api/posts/${route.params.id}`)
 
+useHead({
+  title: post.value?.title + ' | smdbs\'s Blog',
+  meta: [
+    { name: 'description', content: post.value?.title + ' | smdbs\'s Blog' },
+  ]
+})
+
+useSeoMeta({
+  ogTitle: 'smdbs\'s Blog',
+  twitterTitle: 'smdbs\'s Blog',
+  ogDescription: post.value?.title + ' | smdbs\'s Blog',
+  twitterDescription: post.value?.title + ' | smdbs\'s Blog',
+})
+
 const sortedTags = computed(() => {
   return (post.value?.postTags?.toSorted((a, b) => b.tag.order - a.tag.order))?.map((postTag) => postTag.tag)
 })

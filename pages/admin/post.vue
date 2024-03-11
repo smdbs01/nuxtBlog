@@ -40,6 +40,7 @@
           </th>
         </tr>
       </template>
+
       <template
         v-if="posts"
         #tbody
@@ -130,8 +131,8 @@
       :current="currentPage"
       :size="pageSize"
       @update-page="(i) => {
-        currentPage = i
-      }"
+            currentPage = i
+          }"
     />
 
     <LazyAdminPopupWindow
@@ -173,7 +174,10 @@
   </div>
 </template>
 
-<script setup lang="ts">
+<script
+  setup
+  lang="ts"
+>
 
 definePageMeta({
   middleware: [
@@ -181,6 +185,20 @@ definePageMeta({
     "admin",
   ],
   layout: "admin"
+})
+
+useHead({
+  title: 'Post Management | smdbs\'s Blog',
+  meta: [
+    { name: 'description', content: 'Post Management' },
+  ]
+})
+
+useSeoMeta({
+  ogTitle: 'smdbs\'s Blog',
+  twitterTitle: 'smdbs\'s Blog',
+  ogDescription: 'Post Management | smdbs\'s Blog',
+  twitterDescription: 'Post Management | smdbs\'s Blog',
 })
 
 const headers = useRequestHeaders(['cookie']) as HeadersInit

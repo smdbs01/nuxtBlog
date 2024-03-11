@@ -1,6 +1,14 @@
 <template>
   <header class="sticky left-0 top-0 z-20 h-15 w-full flex items-center justify-center bg-gray-900">
     <nav class="w-full flex items-center justify-between px-2 sm:w-[60rem]">
+      <div>
+        <NuxtLink
+          id="logo"
+          to="/"
+        >
+          Blog <!-- Logo -->
+        </NuxtLink>
+      </div>
       <div class="flex items-center justify-around">
         <NuxtLink to="/">
           Home
@@ -36,5 +44,9 @@ nav a.router-link-active {
 
 nav a:hover {
   @apply text-green-400 border-green-500;
+}
+
+#logo {
+  @apply border-0 text-3xl text-gray-100 font-bold font-serif;
 }
 </style>

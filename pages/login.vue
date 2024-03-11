@@ -54,12 +54,29 @@
   </div>
 </template>
 
-<script setup lang="ts">
+<script
+  setup
+  lang="ts"
+>
 definePageMeta({
   middleware: "guest-only",
   auth: {
     authneticatedRedirectTo: "/",
   }
+})
+
+useHead({
+  title: 'Login | smdbs\'s Blog',
+  meta: [
+    { name: 'description', content: 'Login | smdbs\'s Blog' },
+  ]
+})
+
+useSeoMeta({
+  ogTitle: 'smdbs\'s Blog',
+  twitterTitle: 'smdbs\'s Blog',
+  ogDescription: 'Login | smdbs\'s Blog',
+  twitterDescription: 'Login | smdbs\'s Blog',
 })
 
 const username = ref("user")

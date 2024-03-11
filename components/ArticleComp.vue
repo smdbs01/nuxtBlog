@@ -2,7 +2,7 @@
 
 <template>
   <article>
-    <header class="mb-4 mt-8 flex justify-center text-balance text-5xl line-height-snug">
+    <header class="line-height-s200 mb-4 mt-8 flex justify-center text-balance text-5xl color-blueGray-200">
       {{ title }}
     </header>
     <div
@@ -18,17 +18,10 @@
   lang="ts"
 >
 
-const props = defineProps<{
+defineProps<{
   title: string,
   content: string,
 }>()
-
-useHead({
-  title: props.title,
-  meta: [
-    { name: 'description', content: truncateMarkdown(props.content, 100) }
-  ]
-})
 
 const router = useRouter()
 const contentEl: Ref<HTMLDivElement | null> = ref(null)
@@ -92,7 +85,7 @@ article {
 }
 
 .content {
-  @apply px-2 b-t-2 b-t-dashed b-t-gray-600;
+  @apply px-2;
 
   /* Paragraph */
   p {
