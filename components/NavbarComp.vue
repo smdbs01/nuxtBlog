@@ -6,7 +6,7 @@
           id="logo"
           to="/"
         >
-          Blog <!-- Logo -->
+          SMDBS <!-- Logo -->
         </NuxtLink>
       </div>
       <div class="flex items-center justify-around">
@@ -16,14 +16,15 @@
         <NuxtLink to="/about">
           About
         </NuxtLink>
+
+        <NuxtLink
+          v-if="status !== 'authenticated'"
+          :to="$route.path === '/' ? '/login' : '/login?redirect=' + $route.path"
+        >
+          Login
+        </NuxtLink>
+        <AvaterComp v-if="status === 'authenticated'" />
       </div>
-      <NuxtLink
-        v-if="status !== 'authenticated'"
-        :to="$route.path === '/' ? '/login' : '/login?redirect=' + $route.path"
-      >
-        Login
-      </NuxtLink>
-      <AvaterComp v-if="status === 'authenticated'" />
     </nav>
   </header>
 </template>

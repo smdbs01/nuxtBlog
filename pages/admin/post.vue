@@ -1,5 +1,7 @@
 <template>
-  <div class="relative size-full flex flex-col items-center bg-gray-800 p-4 text-gray-100">
+  <div
+    class="relative size-full flex flex-col items-center bg-gray-800 p-4 text-gray-100"
+  >
     <h1 class="mb-6 mt-2 text-3xl font-bold tracking-wider">
       Post Management
     </h1>
@@ -98,7 +100,15 @@
             <div class="flex justify-center gap-4">
               <button
                 class="flex items-center gap-1 border-2 border-blue-300 rounded-md px-2 py-1 transition-all duration-200 focus:bg-blue-300 hover:bg-blue-300 focus:text-gray-800 hover:text-gray-800 focus:outline-none"
-                @click="editPost(post.id, post.title, post.content, post.published === 1, post.postTags.map(pt => pt.tag.id))"
+                @click="
+                  editPost(
+                    post.id,
+                    post.title,
+                    post.content,
+                    post.published === 1,
+                    post.postTags.map((pt) => pt.tag.id)
+                  )
+                "
               >
                 <div class="i-ph:pencil" />
                 <span class="font-semibold">Edit</span>
@@ -130,9 +140,11 @@
       :total="total || 0"
       :current="currentPage"
       :size="pageSize"
-      @update-page="(i) => {
-            currentPage = i
-          }"
+      @update-page="
+        (i) => {
+          currentPage = i;
+        }
+      "
     />
 
     <LazyAdminPopupWindow
@@ -158,9 +170,7 @@
       @submit="confirmDelete"
     >
       <div class="flex flex-col items-center gap-1 text-gray-200">
-        <span>
-          Are you sure you want to delete this post?
-        </span>
+        <span> Are you sure you want to delete this post? </span>
         <span>Consider <b class="text-blue-300">unpublishing</b> it instead.</span>
       </div>
     </LazyAdminPopupWindow>
@@ -174,130 +184,138 @@
   </div>
 </template>
 
-<script
-  setup
-  lang="ts"
->
+<script setup lang="ts">
+  definePageMeta({
+    middleware: ["auth", "admin"],
+    layout: "admin",
+  });
 
-definePageMeta({
-  middleware: [
-    "auth",
-    "admin",
-  ],
-  layout: "admin"
-})
+  useHead({
+    title: "Post Management | smdbs's Blog",
+    meta: [{ name: "description", content: "Post Management" }],
+  });
 
-useHead({
-  title: 'Post Management | smdbs\'s Blog',
-  meta: [
-    { name: 'description', content: 'Post Management' },
-  ]
-})
+  useSeoMeta({
+    ogTitle: "smdbs's Blog",
+    twitterTitle: "smdbs's Blog",
+    ogDescription: "Post Management | smdbs's Blog",
+    twitterDescription: "Post Management | smdbs's Blog",
+  });
 
-useSeoMeta({
-  ogTitle: 'smdbs\'s Blog',
-  twitterTitle: 'smdbs\'s Blog',
-  ogDescription: 'Post Management | smdbs\'s Blog',
-  twitterDescription: 'Post Management | smdbs\'s Blog',
-})
+  const headers = useRequestHeaders(["cookie"]) as HeadersInit;
+  const { data: total, refresh: refreshTotal } = await useFetch(
+    "/api/admin/posts/count",
+    { headers }
+  );
 
-const headers = useRequestHeaders(['cookie']) as HeadersInit
-const { data: total, refresh: refreshTotal } = await useFetch("/api/admin/posts/count", { headers })
+  const currentPage = ref(1);
+  const pageSize = ref(10);
 
-const currentPage = ref(1)
-const pageSize = ref(10)
+  const {
+    data: posts,
+    pending,
+    refresh,
+  } = await useFetch("/api/admin/posts", {
+    query: {
+      page: currentPage,
+      pageSize: pageSize,
+    },
+    headers,
+  });
 
-const { data: posts, pending, refresh } = await useFetch("/api/admin/posts", {
-  query: {
-    page: currentPage,
-    pageSize: pageSize
-  },
-  headers
-})
+  const isEdit = ref(false);
+  const isDelete = ref(false);
+  const isView = ref(false);
 
-const isEdit = ref(false)
-const isDelete = ref(false)
-const isView = ref(false)
+  const activePostID = ref(0);
+  const editTitle = ref("");
+  const editContent = ref("");
+  const editPublished = ref(false);
+  const editTags = ref<number[]>([]);
 
-const activePostID = ref(0)
-const editTitle = ref("")
-const editContent = ref("")
-const editPublished = ref(false)
-const editTags = ref<number[]>([])
+  const editPost = (
+    id: number,
+    title: string,
+    content: string,
+    published: boolean,
+    tags: number[]
+  ) => {
+    activePostID.value = id;
+    editTitle.value = title;
+    editContent.value = content;
+    editPublished.value = published;
+    editTags.value = tags;
 
-const editPost = (id: number, title: string, content: string, published: boolean, tags: number[]) => {
-  activePostID.value = id
-  editTitle.value = title
-  editContent.value = content
-  editPublished.value = published
-  editTags.value = tags
+    isEdit.value = true;
+  };
 
-  isEdit.value = true
-}
+  const newPost = () => {
+    activePostID.value = 0;
+    editTitle.value = "";
+    editContent.value = "";
+    editPublished.value = false;
+    editTags.value = [];
 
-const newPost = () => {
-  activePostID.value = 0
-  editTitle.value = ""
-  editContent.value = ""
-  editPublished.value = false
-  editTags.value = []
+    isEdit.value = true;
+  };
 
-  isEdit.value = true
-}
+  const updatePost = async () => {
+    if (activePostID.value === 0) {
+      // new post
+      await $fetch("/api/admin/posts", {
+        method: "POST",
+        body: {
+          title: editTitle.value,
+          content: editContent.value,
+          published: editPublished.value ? 1 : 0,
+          tags: editTags.value,
+        },
+      })
+        .catch(() => {
+          // do nothing
+        })
+        .then(() => {
+          refreshTotal();
+        });
+    } else {
+      await $fetch(`/api/admin/posts/${activePostID.value}`, {
+        method: "PUT",
+        body: {
+          title: editTitle.value,
+          content: editContent.value,
+          published: editPublished.value ? 1 : 0,
+          tags: editTags.value,
+        },
+      }).catch(() => {
+        // do nothing
+      });
+    }
+    refresh();
 
-const updatePost = async () => {
-  if (activePostID.value === 0) {
-    // new post
-    await $fetch("/api/admin/posts", {
-      method: "POST",
-      body: {
-        title: editTitle.value,
-        content: editContent.value,
-        published: editPublished.value ? 1 : 0,
-        tags: editTags.value
-      }
-    }).catch(() => {
-      // do nothing
-    }).then(() => {
-      refreshTotal()
-    })
-  } else {
+    isEdit.value = false;
+  };
+
+  const deletePost = (id: number) => {
+    activePostID.value = id;
+
+    isDelete.value = true;
+  };
+
+  const confirmDelete = async () => {
     await $fetch(`/api/admin/posts/${activePostID.value}`, {
-      method: "PUT",
-      body: {
-        title: editTitle.value,
-        content: editContent.value,
-        published: editPublished.value ? 1 : 0,
-        tags: editTags.value
-      }
-    }).catch(() => {
-      // do nothing
+      method: "DELETE",
     })
-  }
-  refresh()
+      .catch(() => {
+        // do nothing
+      })
+      .then(() => {
+        refresh();
+        refreshTotal();
+      });
+    isDelete.value = false;
+  };
 
-  isEdit.value = false
-}
-
-const deletePost = (id: number) => {
-  activePostID.value = id
-
-  isDelete.value = true
-}
-
-const confirmDelete = async () => {
-  await $fetch(`/api/admin/posts/${activePostID.value}`, {
-    method: "DELETE"
-  }).catch(() => {
-    // do nothing
-  }).then(() => {
-    refresh()
-    refreshTotal()
-  })
-  isDelete.value = false
-}
-
-const viewPost = () => {
-  isView.value = true
-}
+  const viewPost = () => {
+    isView.value = true;
+  };
 </script>

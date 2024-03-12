@@ -1,8 +1,8 @@
 <template>
-  <div class="relative size-full flex flex-col items-center bg-gray-800 p-4 text-gray-100">
-    <h1 class="mb-6 mt-2 text-3xl font-bold tracking-wider">
-      Tag Management
-    </h1>
+  <div
+    class="relative size-full flex flex-col items-center bg-gray-800 p-4 text-gray-100"
+  >
+    <h1 class="mb-6 mt-2 text-3xl font-bold tracking-wider">Tag Management</h1>
     <div>
       <!-- Sorting and creating -->
       <div class="flex gap-4">
@@ -17,48 +17,24 @@
     <AdminTable>
       <template #thead>
         <tr class="tracking-wider">
-          <th class="w-[5%]">
-            #
-          </th>
-          <th class="w-[10%]">
-            Tag Name
-          </th>
-          <th class="w-[20%]">
-            Preview
-          </th>
-          <th class="w-[5%]">
-            Order
-          </th>
-          <th class="w-[5%]">
-            Post Count
-          </th>
-          <th class="w-[15%]">
-            Created Date
-          </th>
-          <th class="w-[15%]">
-            Updated Date
-          </th>
-          <th class="w-[25%]">
-            Actions
-          </th>
+          <th class="w-[5%]">#</th>
+          <th class="w-[10%]">Tag Name</th>
+          <th class="w-[20%]">Preview</th>
+          <th class="w-[5%]">Order</th>
+          <th class="w-[5%]">Post Count</th>
+          <th class="w-[15%]">Created Date</th>
+          <th class="w-[15%]">Updated Date</th>
+          <th class="w-[25%]">Actions</th>
         </tr>
       </template>
 
-      <template
-        v-if="tags"
-        #tbody
-      >
+      <template v-if="tags" #tbody>
         <tr v-if="tags.length === 0">
-          <td colspan="6">
-            No tags
-          </td>
+          <td colspan="6">No tags</td>
         </tr>
         <LoadingComp v-if="pending" />
 
-        <tr
-          v-for="tag in tags"
-          :key="tag.id"
-        >
+        <tr v-for="tag in tags" :key="tag.id">
           <td class="text-center">
             {{ tag.id }}
           </td>
@@ -66,11 +42,7 @@
             {{ tag.name }}
           </td>
           <td class="text-center">
-            <TagComp
-              :id="tag.id"
-              :name="tag.name"
-              :color="tag.color"
-            />
+            <TagComp :id="tag.id" :name="tag.name" :color="tag.color" />
           </td>
           <td class="text-center">
             {{ tag.order }}
@@ -120,9 +92,11 @@
       :total="total || 0"
       :current="currentPage"
       :size="pageSize"
-      @update-page="(i) => {
-            currentPage = i
-          }"
+      @update-page="
+        (i) => {
+          currentPage = i;
+        }
+      "
     />
 
     <LazyAdminPopupWindow
@@ -147,139 +121,137 @@
       @submit="confirmDelete"
     >
       <div class="mb-2 flex flex-col items-center gap-1 text-gray-200">
-        <span>
-          Are you sure you want to delete this tag?
-        </span>
+        <span> Are you sure you want to delete this tag? </span>
       </div>
     </LazyAdminPopupWindow>
 
-    <LazyAdminPopupWindow
-      v-if="isView"
-      @cancel="isView = false"
-    >
+    <LazyAdminPopupWindow v-if="isView" @cancel="isView = false">
       view
     </LazyAdminPopupWindow>
   </div>
 </template>
 
-<script
-  setup
-  lang="ts"
->
-definePageMeta({
-  middleware: [
-    "auth",
-    "admin",
-  ],
-  layout: "admin"
-})
+<script setup lang="ts">
+  definePageMeta({
+    middleware: ["auth", "admin"],
+    layout: "admin",
+  });
 
-useHead({
-  title: 'Tag Management | smdbs\'s Blog',
-  meta: [
-    { name: 'description', content: 'Tag Management' },
-  ]
-})
+  useHead({
+    title: "Tag Management | smdbs's Blog",
+    meta: [{ name: "description", content: "Tag Management" }],
+  });
 
-useSeoMeta({
-  ogTitle: 'smdbs\'s Blog',
-  twitterTitle: 'smdbs\'s Blog',
-  ogDescription: 'Tag Management | smdbs\'s Blog',
-  twitterDescription: 'Tag Management | smdbs\'s Blog',
-})
+  useSeoMeta({
+    ogTitle: "smdbs's Blog",
+    twitterTitle: "smdbs's Blog",
+    ogDescription: "Tag Management | smdbs's Blog",
+    twitterDescription: "Tag Management | smdbs's Blog",
+  });
 
-const headers = useRequestHeaders(['cookie']) as HeadersInit
-const { data: total, refresh: refreshTotal } = await useFetch("/api/admin/tags/count", { headers })
+  const headers = useRequestHeaders(["cookie"]) as HeadersInit;
+  const { data: total, refresh: refreshTotal } = await useFetch(
+    "/api/admin/tags/count",
+    { headers }
+  );
 
-const currentPage = ref(1)
-const pageSize = ref(10)
+  const currentPage = ref(1);
+  const pageSize = ref(10);
 
-const { data: tags, pending, refresh } = await useFetch("/api/admin/tags", {
-  query: {
-    page: currentPage,
-    pageSize: pageSize
-  },
-  headers
-})
+  const {
+    data: tags,
+    pending,
+    refresh,
+  } = await useFetch("/api/admin/tags", {
+    query: {
+      page: currentPage,
+      pageSize: pageSize,
+    },
+    headers,
+  });
 
-const isEdit = ref(false)
-const isDelete = ref(false)
-const isView = ref(false)
+  const isEdit = ref(false);
+  const isDelete = ref(false);
+  const isView = ref(false);
 
-const activeTagID = ref(0)
-const editName = ref("")
-const editOrder = ref(0)
-const editColor = ref("")
+  const activeTagID = ref(0);
+  const editName = ref("");
+  const editOrder = ref(0);
+  const editColor = ref("");
 
-const editTag = (id: number, name: string, order: number, color: string) => {
-  activeTagID.value = id
-  editName.value = name
-  editOrder.value = order
-  editColor.value = color
+  const editTag = (id: number, name: string, order: number, color: string) => {
+    activeTagID.value = id;
+    editName.value = name;
+    editOrder.value = order;
+    editColor.value = color;
 
-  isEdit.value = true
-}
+    isEdit.value = true;
+  };
 
-const newTag = () => {
-  activeTagID.value = 0
-  editName.value = "Some Text"
-  editOrder.value = 0
-  editColor.value = "#000000"
+  const newTag = () => {
+    activeTagID.value = 0;
+    editName.value = "Some Text";
+    editOrder.value = 0;
+    editColor.value = "#000000";
 
-  isEdit.value = true
-}
+    isEdit.value = true;
+  };
 
-const updateTag = async () => {
-  if (activeTagID.value === 0) {
-    // new post
-    await $fetch("/api/admin/tags", {
-      method: "POST",
-      body: {
-        name: editName.value,
-        order: editOrder.value,
-        color: editColor.value,
-      }
-    }).catch(() => {
-      // do nothing
-    }).then(() => {
-      refreshTotal()
-    })
-  } else {
+  const updateTag = async () => {
+    if (activeTagID.value === 0) {
+      // new post
+      await $fetch("/api/admin/tags", {
+        method: "POST",
+        body: {
+          name: editName.value,
+          order: editOrder.value,
+          color: editColor.value,
+        },
+      })
+        .catch(() => {
+          // do nothing
+        })
+        .then(() => {
+          refreshTotal();
+        });
+    } else {
+      await $fetch(`/api/admin/tags/${activeTagID.value}`, {
+        method: "PUT",
+        body: {
+          name: editName.value,
+          order: editOrder.value,
+          color: editColor.value,
+        },
+      }).catch(() => {
+        // do nothing
+      });
+    }
+    refresh();
+
+    isEdit.value = false;
+  };
+
+  const deleteTag = (id: number) => {
+    activeTagID.value = id;
+
+    isDelete.value = true;
+  };
+
+  const confirmDelete = async () => {
     await $fetch(`/api/admin/tags/${activeTagID.value}`, {
-      method: "PUT",
-      body: {
-        name: editName.value,
-        order: editOrder.value,
-        color: editColor.value,
-      }
-    }).catch(() => {
-      // do nothing
+      method: "DELETE",
     })
-  }
-  refresh()
+      .catch(() => {
+        // do nothing
+      })
+      .then(() => {
+        refresh();
+        refreshTotal();
+      });
+    isDelete.value = false;
+  };
 
-  isEdit.value = false
-}
-
-const deleteTag = (id: number) => {
-  activeTagID.value = id
-
-  isDelete.value = true
-}
-
-const confirmDelete = async () => {
-  await $fetch(`/api/admin/tags/${activeTagID.value}`, {
-    method: "DELETE"
-  }).catch(() => {
-    // do nothing
-  }).then(() => {
-    refresh()
-    refreshTotal()
-  })
-  isDelete.value = false
-}
-
-const viewTag = () => {
-  isView.value = true
-}
+  const viewTag = () => {
+    isView.value = true;
+  };
 </script>
