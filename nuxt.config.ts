@@ -20,6 +20,9 @@ export default defineNuxtConfig({
     head: {
       charset: "utf-8",
       viewport: "width=device-width, initial-scale=1",
+      link: [
+        {rel: "stylesheet", href: "https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.11.1/katex.min.css"}
+      ]
     },
   },
   css: ["@unocss/reset/tailwind.css"],

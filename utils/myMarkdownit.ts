@@ -6,6 +6,7 @@ import sub from "markdown-it-sub";
 import sup from "markdown-it-sup";
 import fn from "markdown-it-footnote";
 import container from "markdown-it-container";
+import katex from "@iktakahiro/markdown-it-katex";
 import anchor from "markdown-it-anchor";
 import toc from "markdown-it-toc-done-right";
 import slugify from "@sindresorhus/slugify";
@@ -27,6 +28,7 @@ const mdi = markdownit({
   .use(sup)
   .use(fn)
   .use(container, "warning")
+  .use(katex)
   .use(anchor, {
     level: [1, 2, 3],
     slugify: (s) => slugify(s),
