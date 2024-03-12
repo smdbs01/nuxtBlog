@@ -1,75 +1,16 @@
-# Nuxt 3 Minimal Starter
+# Nuxt Blog (A Better Name Coming Up Later)
 
-Look at the [Nuxt 3 documentation](https://nuxt.com/docs/getting-started/introduction) to learn more.
+Still WIP pretty much.
 
-## Setup
+## Description
 
-Make sure to install the dependencies:
+A simple blog project using Nuxt3 + MySql to allow update, edit, and show Markdown articles to user. Utilizes AuthJs for authentication.
 
-```bash
-# npm
-npm install
+Features:
 
-# pnpm
-pnpm install
+- Frontend UI with Vue + UnoCSS
 
-# yarn
-yarn install
+- Upload, update, and delete posts
 
-# bun
-bun install
-```
+- Add, edit, and delete tags
 
-## Development Server
-
-Start the development server on `http://localhost:3000`:
-
-```bash
-# npm
-npm run dev
-
-# pnpm
-pnpm run dev
-
-# yarn
-yarn dev
-
-# bun
-bun run dev
-```
-
-## Production
-
-Build the application for production:
-
-```bash
-# npm
-npm run build
-
-# pnpm
-pnpm run build
-
-# yarn
-yarn build
-
-# bun
-bun run build
-```
-
-Locally preview production build:
-
-```bash
-# npm
-npm run preview
-
-# pnpm
-pnpm run preview
-
-# yarn
-yarn preview
-
-# bun
-bun run preview
-```
-
-Check out the [deployment documentation](https://nuxt.com/docs/getting-started/deployment) for more information.
