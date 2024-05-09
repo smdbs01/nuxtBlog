@@ -15,32 +15,30 @@
       {{ description + (description.length > truncateLength ? "..." : "") }}
     </div>
 
-    <div class="mt-2 flex items-end justify-between">
-      <!-- Tags -->
-      <div class="flex gap-2">
-        <TagComp
-          v-for="tag in sortedTags"
-          :id="tag.id"
-          :key="tag.id"
-          :name="tag.name"
-          :color="tag.color"
-        />
-      </div>
+    <!-- Tags -->
+    <div class="mt-4 hidden gap-2 sm:flex">
+      <TagComp
+        v-for="tag in sortedTags"
+        :id="tag.id"
+        :key="tag.id"
+        :name="tag.name"
+        :color="tag.color"
+      />
+    </div>
 
-      <!-- Time -->
-      <div class="mt-2 text-right text-sm">
-        <div>
-          Created at:
-          <span class="font-mono">
-            {{ parseDateTimeString(createdDate) }}
-          </span>
-        </div>
-        <div v-if="updatedDate !== createdDate">
-          Updated at:
-          <span class="font-mono">
-            {{ parseDateTimeString(updatedDate) }}
-          </span>
-        </div>
+    <!-- Time -->
+    <div class="mt-2 text-right text-sm">
+      <div>
+        Created at:
+        <span class="font-mono">
+          {{ parseDateTimeString(createdDate) }}
+        </span>
+      </div>
+      <div v-if="updatedDate !== createdDate">
+        Updated at:
+        <span class="font-mono">
+          {{ parseDateTimeString(updatedDate) }}
+        </span>
       </div>
     </div>
   </div>
